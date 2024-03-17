@@ -117,7 +117,7 @@ CREATE SEQUENCE Task_seq
 -- No Candidate Key
 -- Foriegn Key: TaskID, UserID, Assigned to"
 CREATE TABLE Assigned_Tasks (
-    UserID VARCHAR(20),
+    UserID VARCHAR(20) NOT NULL,
     TaskID NUMBER PRIMARY KEY,
     Task_Name VARCHAR(35),
     Duedate TIMESTAMP,
@@ -138,7 +138,7 @@ CREATE TABLE Assigned_Tasks (
 -- No Candidate Key
 -- Foriegn Key: TaskID, UserID"
 CREATE TABLE Completed_Tasks (
-    UserID VARCHAR(20),
+    UserID VARCHAR(20) NOT NULL,
     TaskID NUMBER PRIMARY KEY,
     Task_Name VARCHAR(35),
     Duedate TIMESTAMP,
