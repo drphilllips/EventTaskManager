@@ -127,7 +127,8 @@ CREATE TABLE Assigned_Tasks (
     Assigned_To VARCHAR(20),
     Assign_Date_Time TIMESTAMP DEFAULT SYSDATE,
     FOREIGN KEY (UserID) REFERENCES USERS (UserID),
-    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),
+    FOREIGN KEY (TypeID) REFERENCES Task_Type (TypeID),
+    -- FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),
     FOREIGN KEY (Assigned_To) REFERENCES USERS (UserID)
 );
 
@@ -146,7 +147,8 @@ CREATE TABLE Completed_Tasks (
     TypeID NUMBER,
     Completed_Date_Time TIMESTAMP DEFAULT SYSDATE,
     FOREIGN KEY (UserID) REFERENCES USERS (UserID),
-    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID)
+    FOREIGN KEY (TypeID) REFERENCES Task_Type (TypeID)
+    -- FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID)
 );
 
 -- "Subtask_of(Parent TaskTaskID: number, Sub Task TaskID: number)
@@ -157,8 +159,8 @@ CREATE TABLE Subtask_of (
     Parent_TaskID NUMBER,
     Sub_TaksID NUMBER,
     PRIMARY KEY (Parent_TaskID, Sub_TaksID),
-    FOREIGN KEY (Parent_TaskID) REFERENCES Tasks (TaskID),
-    FOREIGN KEY (Sub_TaksID) REFERENCES Tasks (TaskID)
+    FOREIGN KEY (Parent_TaskID) REFERENCES Assigned_Tasks (TaskID),
+    FOREIGN KEY (Sub_TaksID) REFERENCES Assigned_Tasks (TaskID)
 );
 
 -- "Company(CompanyID: number, Name: String, Street Address: String, City: String, State: String, 
@@ -213,7 +215,7 @@ CREATE TABLE Is_Contacted (
     TaskID NUMBER,
     ContactID NUMBER,
     PRIMARY KEY (TaskID, ContactID),
-    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),
+    FOREIGN KEY (TaskID) REFERENCES Assigned_Tasks (TaskID),
     FOREIGN KEY (ContactID) REFERENCES Business_Contacts (ContactID)
 );
 
@@ -260,7 +262,7 @@ CREATE TABLE Satisfies (
     TaskID NUMBER,
     FeatureID NUMBER,
     PRIMARY KEY (TaskID, FeatureID),
-    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),
+    FOREIGN KEY (TaskID) REFERENCES Assigned_Tasks (TaskID),
     FOREIGN KEY (FeatureID) REFERENCES Event_Features (FeatureID)
 );
 
