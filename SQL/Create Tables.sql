@@ -16,7 +16,7 @@ DROP TABLE Associated_With;
 DROP TABLE Event_Features;
 DROP TABLE EVENTS;
 DROP TABLE Locations;
-DROP TABLE Tasks;
+-- DROP TABLE Tasks;
 
 --No Foriegn Key
 DROP TABLE USERS;
@@ -101,23 +101,29 @@ CREATE SEQUENCE Task_seq
     INCREMENT BY 1
     NOCACHE;
 
-CREATE TABLE Tasks (
-    TaskID NUMBER PRIMARY KEY,
-    Task_Name VARCHAR(35),
-    Duedate TIMESTAMP,
-    Notes VARCHAR(250),
-    Description VARCHAR(100),
-    TypeID NUMBER,
-    FOREIGN KEY (TypeID) REFERENCES Task_Type (TypeID)
-);
+-- CREATE TABLE Tasks (
+--     TaskID NUMBER PRIMARY KEY,
+--     Task_Name VARCHAR(35),
+--     Duedate TIMESTAMP,
+--     Notes VARCHAR(250),
+--     Description VARCHAR(100),
+--     TypeID NUMBER,
+--     FOREIGN KEY (TypeID) REFERENCES Task_Type (TypeID)
+-- );
 
--- "Assigned_Tasks(UserID: string, TaskID: number, Assigned to: string, Assigned Date/Time: Date
+-- "Assigned_Tasks(UserID: string, TaskID: number, Name: String, Duedate: Date, Notes: String, 
+-- Description: String, TypeID: number, Assigned to: string, Assigned Date/Time: Date
 -- Primary Key: (UserID, TaskID)
 -- No Candidate Key
 -- Foriegn Key: TaskID, UserID, Assigned to"
 CREATE TABLE Assigned_Tasks (
     UserID VARCHAR(20),
     TaskID NUMBER PRIMARY KEY,
+    Task_Name VARCHAR(35),
+    Duedate TIMESTAMP,
+    Notes VARCHAR(250),
+    Description VARCHAR(100),
+    TypeID NUMBER,
     Assigned_To VARCHAR(20),
     Assign_Date_Time TIMESTAMP DEFAULT SYSDATE,
     FOREIGN KEY (UserID) REFERENCES USERS (UserID),
@@ -125,13 +131,19 @@ CREATE TABLE Assigned_Tasks (
     FOREIGN KEY (Assigned_To) REFERENCES USERS (UserID)
 );
 
--- "Completed_Tasks(UserID: string, TaskID: number,  Completed Date/Time: Date
+-- "Completed_Tasks(UserID: string, TaskID: number, Name: String, Duedate: Date, Notes: String, 
+-- Description: String, TypeID: number, Completed Date/Time: Date
 -- Primary Key: (UserID, TaskID)
 -- No Candidate Key
 -- Foriegn Key: TaskID, UserID"
 CREATE TABLE Completed_Tasks (
     UserID VARCHAR(20),
     TaskID NUMBER PRIMARY KEY,
+    Task_Name VARCHAR(35),
+    Duedate TIMESTAMP,
+    Notes VARCHAR(250),
+    Description VARCHAR(100),
+    TypeID NUMBER,
     Completed_Date_Time TIMESTAMP DEFAULT SYSDATE,
     FOREIGN KEY (UserID) REFERENCES USERS (UserID),
     FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID)
