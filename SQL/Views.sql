@@ -3,7 +3,7 @@
 --Create a a view for assigned Tasks
 CREATE VIEW All_Assigned_Tasks (assigned_tasks, USERS) AS
     SELECT (u.first_name || ' ' || u.Last_Name) as Assigned_To,
-            ast.Name, ast.Description, Date(ast.Duedate)
+            ast.Task_Name, ast.Description, Date(ast.Duedate)
     FROM USERS u Join Assigned_Tasks ast
-    ON u.userID = ast.userID
+    ON u.userID = ast.Assigned_To
 
