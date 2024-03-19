@@ -7,24 +7,24 @@ DROP TABLE Hosts;
 DROP TABLE Event_Hosts;
 DROP TABLE Admins;
 DROP TABLE Satisfies;
-DROP TABLE Assigned_Tasks;
-DROP TABLE Completed_Tasks;
 DROP TABLE Subtask_of;
 DROP TABLE Is_Contacted;
+DROP TABLE Assigned_Tasks;
+DROP TABLE Completed_Tasks;
 DROP TABLE Business_Contacts;
 DROP TABLE Associated_With;
 DROP TABLE Event_Features;
 DROP TABLE EVENTS;
 DROP TABLE Locations;
--- DROP TABLE Tasks;
+--DROP TABLE Tasks;
 
 --No Foriegn Key
-DROP TABLE USERS;
-DROP TABLE Task_Type;
 DROP TABLE Company;
 DROP TABLE Feature_Inventory;
 DROP TABLE Event_Types;
 DROP TABLE Location_types;
+DROP TABLE USERS;
+DROP TABLE Task_Type;
 
 -- Sequences used to generate automatic primary keys (in oracle)
 DROP SEQUENCE Task_Type_seq;
@@ -77,7 +77,7 @@ CREATE TABLE Admins (
 -- "Task_Type(TypeID: number, Name: String)
 -- Primary Key: TaskID
 -- No Candidate Key
--- No Foriegn Key"
+-- No Foreign Key"
 
 CREATE SEQUENCE Task_Type_seq
     MINVALUE 1
@@ -89,6 +89,7 @@ CREATE TABLE Task_Type (
     TypeID NUMBER PRIMARY KEY,
     Type_Name VARCHAR(30)
 );
+
 
 -- "Tasks(TaskID: number, Name: String, Duedate: Date, Notes: String, 
 -- Description: String, TypeID: number)
@@ -132,6 +133,7 @@ CREATE TABLE Assigned_Tasks (
     FOREIGN KEY (Assigned_To) REFERENCES USERS (UserID)
 );
 
+
 -- "Completed_Tasks(UserID: string, TaskID: number, Name: String, Duedate: Date, Notes: String, 
 -- Description: String, TypeID: number, Completed Date/Time: Date
 -- Primary Key: (UserID, TaskID)
@@ -151,6 +153,8 @@ CREATE TABLE Completed_Tasks (
     -- FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID)
 );
 
+
+
 -- "Subtask_of(Parent TaskTaskID: number, Sub Task TaskID: number)
 -- Primary Key: (Parent TaskTaskID, Sub Task TaskID)
 -- No Candidate Key
@@ -162,6 +166,8 @@ CREATE TABLE Subtask_of (
     FOREIGN KEY (Parent_TaskID) REFERENCES Assigned_Tasks (TaskID),
     FOREIGN KEY (Sub_TaksID) REFERENCES Assigned_Tasks (TaskID)
 );
+
+
 
 -- "Company(CompanyID: number, Name: String, Street Address: String, City: String, State: String, 
 -- ZipCode: String, Description: String)
@@ -183,6 +189,7 @@ CREATE TABLE Company (
     ZipCode CHAR(5),
     Description VARCHAR(100)
 );
+
 
 -- "Business_Contacts(ContactID: number, First_Name: String, Last_name: String, Phone: String, 
 -- Email: String, Job Title: String, CompanuID: number
@@ -266,6 +273,8 @@ CREATE TABLE Satisfies (
     FOREIGN KEY (FeatureID) REFERENCES Event_Features (FeatureID)
 );
 
+
+
 -- "Event Types(Event TypeID: number, Name: String)
 -- Primary Key: Event TypeID
 -- No Candidate Key
@@ -281,6 +290,7 @@ CREATE TABLE Event_Types (
     Event_Type_Name VARCHAR(50)
 );
 
+
 -- "Location Type(Location Type ID: number, Name: String)
 -- Primary Key: Location TypeID
 -- No Candidate Key
@@ -295,6 +305,8 @@ CREATE TABLE Location_types (
     Location_typeID NUMBER Primary KEY,
     Loc_Type_Name VARCHAR(50)
 );
+
+
 
 -- "Locations(LocID: number, Name: String, Descritpion: String, Capacity: integer, Location TypeID: number
 -- Primary Key: LocID
@@ -314,6 +326,8 @@ CREATE TABLE Locations (
     Location_typeID NUMBER,
     FOREIGN KEY (Location_typeID) REFERENCES Location_types (Location_typeID)
 );
+
+
 
 -- "Events(EventID: number, Name: String, Number of Attendees: integer, Start Date/Time: timestamp, 
 -- end Date/Time: timestamp, Event TypeID: number, LocID: number, Description: String
@@ -350,6 +364,7 @@ CREATE TABLE Associated_With (
     FOREIGN KEY (EventID) REFERENCES Events (EventID),
     FOREIGN KEY (FeatureID) REFERENCES Event_Features (FeatureID)
 );
+
 
 -- "Administrates(UserID: String, EventID: number)
 -- Primary Key: (UserID, EventID)
@@ -388,8 +403,6 @@ CREATE TABLE Is_Present_at (
     FOREIGN KEY (EventID) REFERENCES Events (EventID),
     FOREIGN KEY (UserID) REFERENCES Event_Hosts (UserID)
 );
-
-
 
 
 
