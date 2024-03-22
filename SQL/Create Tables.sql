@@ -1,16 +1,17 @@
 --DROP Tables
 
---Foriegn Key
+--Foreign Key
 DROP TABLE Is_Present_at;
 DROP TABLE Administrates;
 DROP TABLE Hosts;
 DROP TABLE Event_Hosts;
 DROP TABLE Admins;
 DROP TABLE Satisfies;
-DROP TABLE Subtask_of;
+--DROP TABLE Subtask_of;
 DROP TABLE Is_Contacted;
-DROP TABLE Assigned_Tasks;
-DROP TABLE Completed_Tasks;
+--DROP TABLE Assigned_Tasks;
+--DROP TABLE Completed_Tasks;
+DROP TABLE Tasks;
 DROP TABLE Business_Contacts;
 DROP TABLE Associated_With;
 DROP TABLE Event_Features;
@@ -117,21 +118,21 @@ CREATE SEQUENCE Task_seq
 -- Primary Key: (UserID, TaskID)
 -- No Candidate Key
 -- Foriegn Key: TaskID, UserID, Assigned to"
-CREATE TABLE Assigned_Tasks (
-    UserID VARCHAR(20) NOT NULL,
-    TaskID NUMBER PRIMARY KEY,
-    Task_Name VARCHAR(35),
-    Duedate TIMESTAMP,
-    Notes VARCHAR(250),
-    Description VARCHAR(100),
-    TypeID NUMBER,
-    Assigned_To VARCHAR(20),
-    Assign_Date_Time TIMESTAMP DEFAULT SYSDATE,
-    FOREIGN KEY (UserID) REFERENCES USERS (UserID),
-    FOREIGN KEY (TypeID) REFERENCES Task_Type (TypeID),
+--CREATE TABLE Assigned_Tasks (
+---    UserID VARCHAR(20) NOT NULL,
+--    TaskID NUMBER PRIMARY KEY,
+--    Task_Name VARCHAR(35),
+--    Duedate TIMESTAMP,
+--    Notes VARCHAR(250),
+ --   Description VARCHAR(100),
+ --   TypeID NUMBER,
+ --   Assigned_To VARCHAR(20),
+ --   Assign_Date_Time TIMESTAMP DEFAULT SYSDATE,
+ --   FOREIGN KEY (UserID) REFERENCES USERS (UserID),
+ --   FOREIGN KEY (TypeID) REFERENCES Task_Type (TypeID),
     -- FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),
-    FOREIGN KEY (Assigned_To) REFERENCES USERS (UserID)
-);
+ --   FOREIGN KEY (Assigned_To) REFERENCES USERS (UserID)
+--);
 
 
 -- "Completed_Tasks(UserID: string, TaskID: number, Name: String, Duedate: Date, Notes: String, 
@@ -139,8 +140,26 @@ CREATE TABLE Assigned_Tasks (
 -- Primary Key: (UserID, TaskID)
 -- No Candidate Key
 -- Foriegn Key: TaskID, UserID"
-CREATE TABLE Completed_Tasks (
-    UserID VARCHAR(20) NOT NULL,
+--CREATE TABLE Completed_Tasks (
+  --  UserID VARCHAR(20) NOT NULL,
+    --TaskID NUMBER PRIMARY KEY,
+    --Task_Name VARCHAR(35),
+    --Duedate TIMESTAMP,
+    --Notes VARCHAR(250),
+    --Description VARCHAR(100),
+    --TypeID NUMBER,
+    --Completed_Date_Time TIMESTAMP DEFAULT SYSDATE,
+    --ParentTaskID Number, 
+    --FOREIGN KEY (UserID) REFERENCES USERS (UserID),
+    --FOREIGN KEY (TypeID) REFERENCES Task_Type (TypeID)
+    --Foreign Key (ParentTaskID) Re
+    -- FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID)
+--);
+
+
+CREATE TABLE Tasks (
+    Assigned_by_UserID VARCHAR(20) NOT NULL,
+    Assigned_to_UserID VARCHAR(20) NOT NULL,
     TaskID NUMBER PRIMARY KEY,
     Task_Name VARCHAR(35),
     Duedate TIMESTAMP,
@@ -148,23 +167,12 @@ CREATE TABLE Completed_Tasks (
     Description VARCHAR(100),
     TypeID NUMBER,
     Completed_Date_Time TIMESTAMP DEFAULT SYSDATE,
-    FOREIGN KEY (UserID) REFERENCES USERS (UserID),
-    FOREIGN KEY (TypeID) REFERENCES Task_Type (TypeID)
+    ParentTaskID Number, 
+    FOREIGN KEY (Assigned_by_UserID) REFERENCES USERS (UserID),
+    FOREIGN KEY (Assigned_to_UserID) REFERENCES USERS (UserID),
+    FOREIGN KEY (TypeID) REFERENCES Task_Type (TypeID),
+    Foreign Key (ParentTaskID) References Tasks (TaskID)
     -- FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID)
-);
-
-
-
--- "Subtask_of(Parent TaskTaskID: number, Sub Task TaskID: number)
--- Primary Key: (Parent TaskTaskID, Sub Task TaskID)
--- No Candidate Key
--- Foriegn Key: Parent TaskTaskID, Sub Task TaskID"
-CREATE TABLE Subtask_of (
-    Parent_TaskID NUMBER,
-    Sub_TaksID NUMBER,
-    PRIMARY KEY (Parent_TaskID, Sub_TaksID),
-    FOREIGN KEY (Parent_TaskID) REFERENCES Assigned_Tasks (TaskID),
-    FOREIGN KEY (Sub_TaksID) REFERENCES Assigned_Tasks (TaskID)
 );
 
 
@@ -222,7 +230,7 @@ CREATE TABLE Is_Contacted (
     TaskID NUMBER,
     ContactID NUMBER,
     PRIMARY KEY (TaskID, ContactID),
-    FOREIGN KEY (TaskID) REFERENCES Assigned_Tasks (TaskID),
+    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),  
     FOREIGN KEY (ContactID) REFERENCES Business_Contacts (ContactID)
 );
 
@@ -269,7 +277,7 @@ CREATE TABLE Satisfies (
     TaskID NUMBER,
     FeatureID NUMBER,
     PRIMARY KEY (TaskID, FeatureID),
-    FOREIGN KEY (TaskID) REFERENCES Assigned_Tasks (TaskID),
+    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),
     FOREIGN KEY (FeatureID) REFERENCES Event_Features (FeatureID)
 );
 
