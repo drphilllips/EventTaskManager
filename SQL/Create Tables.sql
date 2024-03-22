@@ -17,6 +17,8 @@ DROP TABLE Associated_With;
 DROP TABLE Event_Features;
 DROP TABLE EVENTS;
 DROP TABLE Locations;
+DROP TABLE Vendor;
+DROP TABLE Caterer;
 --DROP TABLE Tasks;
 
 --No Foriegn Key
@@ -412,7 +414,19 @@ CREATE TABLE Is_Present_at (
     FOREIGN KEY (UserID) REFERENCES Event_Hosts (UserID)
 );
 
+CREATE TABLE Vendor (
+    CompanyID NUMBER, 
+    Equipment_type VARCHAR(50), 
+    PRIMARY Key (CompanyID),
+    FOREIGN KEY (CompanyID) REFERENCES Company (CompanyID)
+);
 
+CREATE TABLE Caterer (
+    CompanyID NUMBER, 
+    Cuisine_type VARCHAR(30), 
+    PRIMARY Key (CompanyID),
+    FOREIGN KEY (CompanyID) REFERENCES Company (CompanyID)
+);
 
 
 

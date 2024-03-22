@@ -15,10 +15,11 @@ Create VIEW All_assigned_tasks AS
     trunc(ast.duedate) as due_date
     FROM assigned_tasks ast NATURAL JOIN users u  
     Left JOIN users u2 on u2.userID = ast.Assigned_to
-    left JOIN satisfies s On s.taskid = ast.taskid
+    left JOIN satisfies s On s.taskid_assigned = ast.taskid
     left JOIN event_features ef on ef.featureid = s.featureid
     left JOIN associated_with aw on aw.featureid = ef.featureid
-    left JOIN events e on e.eventid = aw.eventid;
+    left JOIN events e on e.eventid = aw.eventid
+    where ast.task_name IS NOT NULL;
 
 --view all completed taks    
 Create VIEW All_completed_Tasks AS
@@ -30,10 +31,12 @@ Create VIEW All_completed_Tasks AS
         trunc(c.completed_date_time) as completed_on
         FROM completed_tasks c Inner JOIN users u on u.userID = c.userID 
     --    Left JOIN users u2 on u2.userID = ast.Assigned_to
-        left JOIN satisfies s On s.taskid = c.taskid
+        left JOIN satisfies s On s.taskid_completed = c.taskid
         left JOIN event_features ef on ef.featureid = s.featureid
         left JOIN associated_with aw on aw.featureid = ef.featureid
-        left JOIN events e on e.eventid = aw.eventid;
+        left JOIN events e on e.eventid = aw.eventid
+        where c.task_name IS NOT NULL;
+
         
         
  --View showing all features associated with an event
@@ -53,4 +56,8 @@ Create VIEW Hosts_sign_in AS
     from users u natural join is_present_at ipa
     natural join events e ;
 
-        
+
+select * from All_assigned_tasks;
+select * from All_completed_tasks;
+select * from All_Event_Features;
+select * from Hosts_sign_in;
