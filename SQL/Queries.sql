@@ -22,5 +22,5 @@ where e.locID = l.locID and l.location_name = 'Fuller Upper';
 
 select u.First_Name, u.Last_Name, count(am.EventID)
 from users u, admins a, administrates am, events e
-Where u.UserID = a.UserID and a.UserID = am.UserID and am.eventID = e.eventID
+Where u.UserID = a.UserID and a.UserID = am.UserID and am.eventID = e.eventID 
 Group by u.First_Name, u.Last_Name;

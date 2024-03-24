@@ -16,6 +16,12 @@ INSERT INTO Task_Type VALUES (Task_Type_seq.NEXTVAL, 'Request');
 INSERT INTO Company VALUES  (Company_seq.NEXTVAL, 'Chartwells', '100 Institute Rd', 'Worcester', 'MA', '01609', 'WPI Dining Company');
 INSERT INTO Company VALUES  (Company_seq.NEXTVAL, 'Creedon', ' 39 Jolma Rd', 'Worcester', 'MA', '01604', 'Tables and Chairs');
 
+--Vendor
+INSERT INTO Vendor VALUES (1, 'Tables');
+
+--Caterer
+INSERT INTO Caterer VALUES (2, 'Dining hall food');
+
 --Business_Contacts;
 INSERT INTO Business_Contacts VALUES (Business_Contacts_seq.NEXTVAL, 'Denis',  'Brown', '5088315685', 'dbrown5@wpi.edu', 'Resident District Manager', 1);
 INSERT INTO Business_Contacts VALUES (Business_Contacts_seq.NEXTVAL, 'John',  'Smith', '5087923100', 'inquiries@creedonandco.com', 'District Manager', 2);
@@ -128,3 +134,41 @@ INSERT INTO Is_Contacted VALUES (5, 1);
 
 -- Host sign in
 INSERT INTO Is_Present_at VALUES ('23456789101112131415', 2, TO_TIMESTAMP('2024-03-24 1:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-03-24 3:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- User: Chad
+INSERT INTO USERS VALUES ('34567891011121314151', 'Chad', 'Hucey', '123456789', '3456789123', 'chucey@wpi.edu');
+
+-- Assign Chad as a host
+INSERT INTO Event_Hosts VALUES ('34567891011121314151', '34567891');
+
+-- Event: Gala
+INSERT INTO Events VALUES (Event_seq.NEXTVAL, 'Gala', 175,  TO_TIMESTAMP('2024-03-24 6:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-03-24 8:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, 3, 'Food will be served');
+
+-- Assign Chad as the host
+INSERT INTO Hosts VALUES ('34567891011121314151', 3);
+
+-- Assign an Admin
+INSERT INTO Administrates VALUES ('56789101112131415161', 3);
+
+-- Create event Features
+INSERT INTO Event_Features VALUES (Event_Feature_seq.NEXTVAL, 'Book Credon Tables', 'Contact Credon about Tables', NULL, NULL);
+INSERT INTO Event_Features VALUES (Event_Feature_seq.NEXTVAL, 'Book Inventory Chairs', 'Using inventory chairs', 50, 2);
+
+-- Associate them with event
+INSERT INTO Associated_With VALUES (3, 6);
+INSERT INTO Associated_With VALUES (3, 7);
+
+-- Create Tasks
+INSERT INTO Tasks VALUES ('56789101112131415161', '34567891011121314151', Task_seq.NEXTVAL, 'Book Tables', TO_TIMESTAMP('2024-03-24', 'YYYY-MM-DD'),'N/A', 'Contact Credon about Tables', 2,  TO_TIMESTAMP('2024-03-16', 'YYYY-MM-DD'), NULL);
+INSERT INTO Tasks VALUES ('56789101112131415161', '34567891011121314151', Task_seq.NEXTVAL, 'Book Chairs', TO_TIMESTAMP('2024-03-24', 'YYYY-MM-DD'),'N/A', 'Contact Events Office About Chairs', 2,NULL, NULL);
+
+-- Associate them with an Event Feature
+INSERT INTO Satisfies VALUES (6, 6);
+INSERT INTO Satisfies VALUES (7, 7);
+
+-- Associate tasks with business contacts
+INSERT INTO Is_Contacted VALUES (6, 2);
+
+-- Host sign in
+INSERT INTO Is_Present_at VALUES ('34567891011121314151', 3, TO_TIMESTAMP('2024-03-24 1:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-03-24 3:00:00', 'YYYY-MM-DD HH24:MI:SS'));
