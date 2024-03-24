@@ -168,6 +168,7 @@ CREATE TABLE Tasks (
     Notes VARCHAR(250),
     Description VARCHAR(100),
     TypeID NUMBER,
+    Assigned_Date_Time TIMESTAMP DEFAULT SYSDATE,
     Completed_Date_Time TIMESTAMP DEFAULT SYSDATE,
     ParentTaskID Number, 
     FOREIGN KEY (Assigned_by_UserID) REFERENCES USERS (UserID),
