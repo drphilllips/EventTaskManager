@@ -1,0 +1,23 @@
+{
+  "name": "eventtaskmanager",
+  "version": "1.0.0",
+  "description": "Event planning can be cumbersome and time-consuming as many elements need to come together at the same time and the same place. Typically when planning an event, the event manager must liaise with several other parties including vendors, site managers, entertainment groups, etc. Our team contacted the Events Office here at WPI to gain some insight into the challenges of planning and managing events on campus. Even though the WPI Events Office uses 25Live, a tracking software package, there are still issues with monitoring/managing tasks that need to be completed before hosting an event.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.1",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
