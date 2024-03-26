@@ -353,7 +353,7 @@ CREATE SEQUENCE Event_seq
 CREATE TABLE Events (
     EventID Number PRIMARY KEY,
     Event_Name VARCHAR(50),
-    Attendees_conut INTEGER,
+    Attendees_count INTEGER,
     Start_Time_Date TIMESTAMP,
     End_Time_Date TIMESTAMP,
     Event_TypeID NUMBER,
