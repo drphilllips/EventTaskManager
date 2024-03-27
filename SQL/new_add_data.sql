@@ -174,10 +174,3 @@ INSERT INTO Is_Contacted VALUES (6, 2);
 INSERT INTO Is_Present_at VALUES ('34567891011121314151', 3, TO_TIMESTAMP('2024-03-24 1:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2024-03-24 3:00:00', 'YYYY-MM-DD HH24:MI:SS'));
 
 
---Companies
-Insert into Company Values (nextval('company_seq'), 'WPI', '100 Institute Road', 'Worcester', 'Massachusetts', '01609', Null);
-insert into Company Values (nextval('company_seq'), 'Creedon and Co.', '39 Jolma Road', 'Worcester', 'Massachusetts', '01604', Null);
-insert into Company Values (nextval('company_seq'), 'Gold Coast Catering', '8 Blackstine River Road', 'Worcester', 'Massachusetts', '01607', Null);
-
-Insert Into Vendor Values (2, 'Tents' );
-Insert Into caterer Values (3, 'Chinese' );
