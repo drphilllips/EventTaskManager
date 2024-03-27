@@ -1,9 +1,10 @@
 --Create different views for the web app
 
-Drop VIEW All_assigned_tasks;
-Drop VIEW All_completed_tasks;
-Drop VIEW All_Event_Features;
-Drop VIEW Hosts_sign_in;
+Drop VIEW if exists All_assigned_tasks;
+Drop VIEW if exists All_completed_tasks;
+Drop VIEW if exists All_Event_Features;
+Drop VIEW if exists Hosts_sign_in;
+
 
 --View all assigned tasks
 Create VIEW All_assigned_tasks AS
@@ -36,7 +37,6 @@ Create VIEW All_completed_Tasks AS
         Inner JOIN associated_with aw on aw.featureid = ef.featureid
         Inner JOIN events e on e.eventid = aw.eventid
         where t.task_name IS NOT NULL and t.completed_date_time is NOT NULL;
-
         
         
  --View showing all features associated with an event
@@ -46,7 +46,6 @@ Create VIEW All_completed_Tasks AS
      Inner join associated_with aw on aw.featureid = ef.featureid
      Inner JOIN events e on aw.eventid = e.eventid;
      
-
      
 Create VIEW Hosts_sign_in AS
     select (u.first_name || ' ' || u.Last_Name) as Host_Name,
@@ -55,6 +54,7 @@ Create VIEW Hosts_sign_in AS
             to_char(ipa.sign_out, 'dd-MON-yyyy hh:mm AM') as sign_out
     from users u natural join is_present_at ipa
     natural join events e ;
+	
 
 
 select * from All_assigned_tasks;
