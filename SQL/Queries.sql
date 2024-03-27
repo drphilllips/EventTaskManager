@@ -1,4 +1,4 @@
-select Unique u.First_Name, u.Last_Name 
+select  distinct(u.First_Name), u.Last_Name 
 from users u, event_hosts eh, hosts h, events e, associated_with aw, event_features ef, 
 satisfies s, tasks t
 where u.userID = eh.userID and eh.userID = h.userID and h.eventID = e.eventID and e.eventID = aw.eventID and
@@ -14,7 +14,7 @@ u.First_Name = 'Anne' and u.Last_Name = 'Lapsley' and t.completed_date_time is N
 
 Select e.event_name
 from events e
-where trunc(e.Start_Time_Date) = TO_TIMESTAMP('2024-03-24', 'YYYY-MM-DD');
+where date(e.Start_Time_Date) = TO_TIMESTAMP('2024-03-24', 'YYYY-MM-DD');
 
 select e.Start_Time_Date, e.End_Time_Date 
 from events e, locations l
