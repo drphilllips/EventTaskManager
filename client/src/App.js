@@ -1,7 +1,12 @@
-import React from "react";
+import React, { Fragment } from "react";
+import Login from "./pages/Login.js";
 
 const App = () => (
-  <div>Hello World!</div>
+  <Fragment>
+    <div className="container">
+      <Login />
+    </div>
+  </Fragment>
 );
 
 export default App;
