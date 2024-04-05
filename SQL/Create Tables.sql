@@ -96,6 +96,7 @@ CREATE TABLE Task_Type (
     Type_Name VARCHAR(30)
 );
 
+
 -- "Feature Inventory(ItemID: integer, Name: String, Quantity: integer,
 --  availablity start: time, avaiablity end: time)
 -- Primary Key: ItemID
@@ -246,10 +247,10 @@ CREATE TABLE Tasks (
 
 
 CREATE TABLE Is_Contacted (
-    TaskID integer,
+    FeatureID integer,
     ContactID integer,
-    PRIMARY KEY (TaskID, ContactID),
-    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),  
+    PRIMARY KEY (FeatureID, ContactID),
+    FOREIGN KEY (FeatureID) REFERENCES Features (FeatureID),  
     FOREIGN KEY (ContactID) REFERENCES Business_Contacts (ContactID)
 );
 
@@ -259,10 +260,10 @@ CREATE TABLE Is_Contacted (
 -- Foriegn Key: FeatureID, ItemID"
 
 CREATE TABLE Uses (
-    TaskID integer,
+    FeatureID integer,
     ItemID integer,
-    PRIMARY KEY (TaskID, ItemID),
-    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),  
+    PRIMARY KEY (FeatureID, ItemID),
+    FOREIGN KEY (FeatureID) REFERENCES features (FeatureID),  
     FOREIGN KEY (ItemID) REFERENCES Feature_Inventory (ItemID)
 );
 
