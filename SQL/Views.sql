@@ -16,10 +16,8 @@ Create VIEW All_assigned_tasks AS
     to_char(t.duedate, 'dd-MON-yyyy') as due_date
     FROM tasks t INNER JOIN users u on u.userid = t.assigned_by_userid  
     Inner JOIN users u2 on u2.userID = t.assigned_to_userid
-    Inner JOIN satisfies s On s.taskid = t.taskid
-    Inner JOIN event_features ef on ef.featureid = s.featureid
-    Inner JOIN associated_with aw on aw.featureid = ef.featureid
-    Inner JOIN events e on e.eventid = aw.eventid
+	Inner Join associated_with aw on aw.taskid = t.taskid
+	inner join events e on e.eventid = aw.eventid
     where t.task_name IS NOT NULL and t.completed_date_time is NULL;
 
 --view all completed taks    
@@ -32,20 +30,11 @@ Create VIEW All_completed_Tasks AS
         to_char(t.completed_date_time, 'dd-MON-yyyy') as completed_on
         FROM tasks t Inner JOIN users u on u.userID = t.assigned_to_userid 
     --    Inner JOIN users u2 on u2.userID = ast.Assigned_to
-        Inner JOIN satisfies s On s.taskid = t.taskid
-        Inner JOIN event_features ef on ef.featureid = s.featureid
-        Inner JOIN associated_with aw on aw.featureid = ef.featureid
-        Inner JOIN events e on e.eventid = aw.eventid
+        Inner Join associated_with aw on aw.taskid = t.taskid
+		inner join events e on e.eventid = aw.eventid
         where t.task_name IS NOT NULL and t.completed_date_time is NOT NULL;
         
-        
- --View showing all features associated with an event
- Create VIEW All_Event_Features AS
-     select e.event_name, ef.feature_name
-     from event_features ef 
-     Inner join associated_with aw on aw.featureid = ef.featureid
-     Inner JOIN events e on aw.eventid = e.eventid;
-     
+             
      
 Create VIEW Hosts_sign_in AS
     select (u.first_name || ' ' || u.Last_Name) as Host_Name,
