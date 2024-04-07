@@ -356,9 +356,9 @@ CREATE TABLE Events (
     Start_Time_Date TIMESTAMP,
     End_Time_Date TIMESTAMP,
     Event_TypeID integer,
-    Event_Status VARCHAR(20),
+    Event_Status VARCHAR(20) Default 'Active',
     LocID integer,
-    DESCRIPTION VARCHAR(100),
+    DESCRIPTION VARCHAR(250),
     FOREIGN KEY (Event_TypeID) REFERENCES Event_Types (Event_TypeID),
     FOREIGN KEY (LocID) REFERENCES Locations (LocID)
 );
