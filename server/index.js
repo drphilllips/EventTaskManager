@@ -71,6 +71,39 @@ app.post("/events", async (req, res) => {
   }
 });
 
+// Add an event if you're a host
+app.post("/host_events", async (req, res) => {
+  try {
+    const { event_name } = req.body;
+    const { attendees_count } = req.body;
+    const { start_date } = req.body;
+    const { start_time } = req.body;
+    const { end_date } = req.body;
+    const { end_time } = req.body;
+    const { location } = req.body;
+    const { description } = req.body;
+
+    const newEvent = await pool.query(
+      `INSERT INTO events 
+              (event_name, attendees_count, start_time_date, end_time_date, event_status, locid, description)
+             VALUES ($1, $2, $3, $4, 'Pending', $5, $6) Returning *`,
+      [
+        event_name,
+        attendees_count,
+        start_date.concat(" ", start_time),
+        end_date.concat(" ", end_time),
+        await fetch(`http://localhost:8000/locations/${location}`)
+          .then((res) => res.json())
+          .then((data) => data.locid),
+        description,
+      ]
+    );
+    res.json(newEvent.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 // Get all events
 app.get("/events", async (req, res) => {
   try {
