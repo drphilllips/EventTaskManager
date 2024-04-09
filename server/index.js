@@ -3,12 +3,91 @@ const app = express();
 const cors = require("cors");
 const pool = require("./db");
 
-// Midware
 app.use(cors());
-app.use(express.json()); // allows access to request.body
-// data from the client side
+app.use(express.json());
 
-// ROUTES:
+// ROUTES //
+
+// Login with email and password
+app.get("/users?:email&:password");
+
+// create a user
+// userid | first_name| last_name | user_password | phone | email
+
+app.post("/users", async (req, res) => {
+  // await
+  try {
+    const { userid, first_name, last_name, user_password, phone, email } =
+      req.body;
+    const newUser = await pool.query(
+      "INSERT INTO users (userid, first_name, last_name, user_password, phone, email)\
+            VALUES($1, $2, $3, $4, $5, $6)\
+            RETURNING *",
+      [userid, first_name, last_name, user_password, phone, email]
+    );
+    res.json(newUser.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// get all users
+
+app.get("/users", async (req, res) => {
+  try {
+    const allUsers = await pool.query("SELECT * FROM users");
+    res.json(allUsers.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// get a user
+
+app.get("/users/:userid", async (req, res) => {
+  try {
+    console.log(req.params);
+    const { userid } = req.params;
+    const user = await pool.query("SELECT * FROM users WHERE userid = $1", [
+      userid,
+    ]);
+    res.json(user.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// update a user
+
+app.put("/users/:userid", async (req, res) => {
+  try {
+    const { userid } = req.params;
+    const { first_name, last_name, user_password, phone, email } = req.body;
+    const updateUser = await pool.query(
+      "UPDATE users\
+            SET first_name = $2, last_name = $3, user_password = $4, phone = $5, email = $6\
+            WHERE userid = $1",
+      [userid, first_name, last_name, user_password, phone, email]
+    );
+    res.json("Users was updated.");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// delete a user
+
+app.delete("/users/:userid", async (req, res) => {
+  try {
+    const { userid } = req.params;
+    const deleteUser = await pool.query("DELETE FROM users WHERE userid = $1", [
+      userid,
+    ]);
+    res.json("User was deleted.");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 // Get all locations
 app.get("/locations", async (req, res) => {
@@ -41,52 +120,21 @@ app.get("/locations/:loc", async (req, res) => {
 // Create an Event
 app.post("/events", async (req, res) => {
   try {
-    const { event_name } = req.body;
-    const { attendees_count } = req.body;
-    const { start_date } = req.body;
-    const { start_time } = req.body;
-    const { end_date } = req.body;
-    const { end_time } = req.body;
-    const { location } = req.body;
-    const { description } = req.body;
+    const {
+      event_name,
+      attendees_count,
+      start_date,
+      start_time,
+      end_date,
+      end_time,
+      location,
+      description,
+    } = req.body;
 
     const newEvent = await pool.query(
       `INSERT INTO events 
             (event_name, attendees_count, start_time_date, end_time_date, locid, description)
            VALUES ($1, $2, $3, $4, $5, $6) Returning *`,
-      [
-        event_name,
-        attendees_count,
-        start_date.concat(" ", start_time),
-        end_date.concat(" ", end_time),
-        await fetch(`http://localhost:8000/locations/${location}`)
-          .then((res) => res.json())
-          .then((data) => data.locid),
-        description,
-      ]
-    );
-    res.json(newEvent.rows);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
-// Add an event if you're a host
-app.post("/host_events", async (req, res) => {
-  try {
-    const { event_name } = req.body;
-    const { attendees_count } = req.body;
-    const { start_date } = req.body;
-    const { start_time } = req.body;
-    const { end_date } = req.body;
-    const { end_time } = req.body;
-    const { location } = req.body;
-    const { description } = req.body;
-
-    const newEvent = await pool.query(
-      `INSERT INTO events 
-              (event_name, attendees_count, start_time_date, end_time_date, event_status, locid, description)
-             VALUES ($1, $2, $3, $4, 'Pending', $5, $6) Returning *`,
       [
         event_name,
         attendees_count,
@@ -154,14 +202,16 @@ app.delete("/events/:id", async (req, res) => {
 app.put("/events/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { event_name } = req.body;
-    const { attendees_count } = req.body;
-    const { start_date } = req.body;
-    const { start_time } = req.body;
-    const { end_date } = req.body;
-    const { end_time } = req.body;
-    const { location } = req.body;
-    const { description } = req.body;
+    const {
+      event_name,
+      attendees_count,
+      start_date,
+      start_time,
+      end_date,
+      end_time,
+      location,
+      description,
+    } = req.body;
 
     const editEvent = await pool.query(
       `UPDATE events
@@ -238,11 +288,8 @@ app.post("/hosts", async (req, res) => {
 // Create a task
 app.post("/tasks", async (req, res) => {
   try {
-    const { task_name } = req.body;
-    const { assigned_by } = req.body;
-    const { assigned_to } = req.body;
-    const { duedate } = req.body;
-    const { description } = req.body;
+    const { task_name, assigned_by, assigned_to, duedate, description } =
+      req.body;
 
     const addTask = await pool.query(
       `INSERT INTO Tasks 
@@ -341,11 +388,8 @@ app.delete("/tasks/:id", async (req, res) => {
 app.put("/tasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { task_name } = req.body;
-    const { assigned_by } = req.body;
-    const { assigned_to } = req.body;
-    const { duedate } = req.body;
-    const { description } = req.body;
+    const { task_name, assigned_by, assigned_to, duedate, description } =
+      req.body;
 
     const updateTask = await pool.query(
       `Update tasks
@@ -374,7 +418,7 @@ app.put("/tasks/:id", async (req, res) => {
   }
 });
 
-//Get aan incomplete Tasks
+//Get an incomplete Tasks
 app.get("/incompletetasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -404,15 +448,9 @@ app.put("/incompletetasks/:id", async (req, res) => {
   }
 });
 // Insert into the associated with table
-app.post("/associted_with", async (req, rres) => {
-  try {
-  } catch (error) {
-    console.error(error.messgae);
-  }
-});
 
 // Insert into the satisfies table
 
 app.listen(8000, () => {
-  console.log("server has started");
+  console.log("Server has started!");
 });
