@@ -220,7 +220,7 @@ app.get("/active_events", async (req, res) => {
 		l.location_name as location,
 		e.description
         from events e inner join locations l on l.locid = e.locid
-        where e.event_status = 'Active'
+        where e.event_status = 'active'
         Order by start_Date, start_time`);
 
     res.json(allEvents.rows);
@@ -241,7 +241,7 @@ app.get("/pending_events", async (req, res) => {
 		l.location_name as location,
 		e.description
         from events e inner join locations l on l.locid = e.locid
-        where e.event_status = 'Pending'
+        where e.event_status = 'pending'
         Order by start_Date, start_time`);
 
     res.json(allEvents.rows);
