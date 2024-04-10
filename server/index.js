@@ -208,6 +208,48 @@ app.get("/events", async (req, res) => {
   }
 });
 
+// Get all Active Events
+app.get("/active_events", async (req, res) => {
+  try {
+    const allEvents = await pool.query(`select e.eventid, e.event_name, 
+		e.attendees_count, e.event_status,
+		to_char(e.start_time_date, 'mm-dd-yyyy') as start_Date,
+		to_char(e.start_time_date, 'HH24:mi AM') as start_time,
+		to_char(e.end_time_date, 'mm-dd-yyyy') as end_Date,
+		to_char(e.end_time_date, 'HH24:mi AM') as end_time,
+		l.location_name as location,
+		e.description
+        from events e inner join locations l on l.locid = e.locid
+        where e.event_status = 'Active'
+        Order by start_Date, start_time`);
+
+    res.json(allEvents.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+// Get all Pending Events
+app.get("/pending_events", async (req, res) => {
+  try {
+    const allEvents = await pool.query(`select e.eventid, e.event_name, 
+		e.attendees_count, e.event_status,
+		to_char(e.start_time_date, 'mm-dd-yyyy') as start_Date,
+		to_char(e.start_time_date, 'HH24:mi AM') as start_time,
+		to_char(e.end_time_date, 'mm-dd-yyyy') as end_Date,
+		to_char(e.end_time_date, 'HH24:mi AM') as end_time,
+		l.location_name as location,
+		e.description
+        from events e inner join locations l on l.locid = e.locid
+        where e.event_status = 'Pending'
+        Order by start_Date, start_time`);
+
+    res.json(allEvents.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 // Get an event
 app.get("/events/:id", async (req, res) => {
   try {
