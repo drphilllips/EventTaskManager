@@ -127,11 +127,13 @@ app.post("/events", async (req, res) => {
       attendees_count,
       start_date,
       start_time,
-      end_date,
       end_time,
       location,
       description,
     } = req.body;
+
+    const start_time_date = new Date(start_date + " " + start_time + ":00");
+    const end_time_date = new Date(start_date + " " + end_time + ":00");
 
     const newEvent = await pool.query(
       `INSERT INTO events 
@@ -140,15 +142,15 @@ app.post("/events", async (req, res) => {
       [
         event_name,
         attendees_count,
-        start_date.concat(" ", start_time),
-        end_date.concat(" ", end_time),
-        await fetch(`http://localhost:8000/locations/${location}`)
-          .then((res) => res.json())
-          .then((data) => data.locid),
+        start_time_date,
+        end_time_date,
+        location,
         description,
       ]
     );
     res.json(newEvent.rows);
+    console.log(req.body);
+    console.log(typeof req.body);
   } catch (error) {
     console.error(error.message);
   }
@@ -162,7 +164,6 @@ app.post("/host_events", async (req, res) => {
       attendees_count,
       start_date,
       start_time,
-      end_date,
       end_time,
       location,
       description,
@@ -220,7 +221,7 @@ app.get("/active_events", async (req, res) => {
 		l.location_name as location,
 		e.description
         from events e inner join locations l on l.locid = e.locid
-        where e.event_status = 'active'
+        where e.event_status = 'Active'
         Order by start_Date, start_time`);
 
     res.json(allEvents.rows);
@@ -241,7 +242,7 @@ app.get("/pending_events", async (req, res) => {
 		l.location_name as location,
 		e.description
         from events e inner join locations l on l.locid = e.locid
-        where e.event_status = 'pending'
+        where e.event_status = 'Pending'
         Order by start_Date, start_time`);
 
     res.json(allEvents.rows);
