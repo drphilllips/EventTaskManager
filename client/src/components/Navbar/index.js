@@ -9,7 +9,6 @@ const Navbar = () => {
                     <NavLink to="/" activeStyle>
                         Events Gallery
                     </NavLink>
-
                     <NavLink to="/eventrequest1" activeStyle>
                         Event Request
                     </NavLink>
@@ -20,7 +19,7 @@ const Navbar = () => {
                         About
                     </NavLink>
                     <NavLink to="/sign-out" activeStyle>
-                        Sign Out
+                        Profile
                     </NavLink>
                 </NavMenu>
             </Nav>

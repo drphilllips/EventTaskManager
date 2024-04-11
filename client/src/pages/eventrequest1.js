@@ -22,7 +22,7 @@ const EventRequest = () => {
         <td>Event Name</td>
         <td>  <form>
           <input
-            type="event name"
+            type="String"
             placeholder="Event Name"
           />
                   </form></td>
@@ -58,6 +58,14 @@ const EventRequest = () => {
           <input
             type="Time"
             placeholder="Time"
+          />
+                  </form></td>    </tr>
+                  <tr>
+            <td>Anticipated Attendance</td>
+        <td>                    <form>
+          <input
+            type="Integer"
+            placeholder="Attendance"
           />
                   </form></td>    </tr>
                   <tr>
