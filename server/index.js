@@ -219,7 +219,7 @@ app.get("/active_events", async (req, res) => {
 		l.location_name as location,
 		e.description
         from events e inner join locations l on l.locid = e.locid
-        where e.event_status = 'Active'
+        where e.event_status = 'active'
         Order by start_Date, start_time`);
 
     res.json(allEvents.rows);
@@ -240,7 +240,7 @@ app.get("/pending_events", async (req, res) => {
 		l.location_name as location,
 		e.description
         from events e inner join locations l on l.locid = e.locid
-        where e.event_status = 'Pending'
+        where e.event_status = 'pending'
         Order by start_Date, start_time`);
 
     res.json(allEvents.rows);
@@ -256,6 +256,17 @@ app.get("/events/:id", async (req, res) => {
     const event = await pool.query(`Select * from events where eventid = $1`, [
       id,
     ]);
+    res.json(event.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+// get the most recent event
+app.get("/mostrecentevents", async (req, res) => {
+  try {
+    const event = await pool.query(`select * from events 
+    where eventid = (select max(eventid) from events);`);
     res.json(event.rows);
   } catch (error) {
     console.error(error.message);
@@ -318,32 +329,34 @@ app.put("/events/:id", async (req, res) => {
   }
 });
 
-//Get all users
-app.get("/users", async (req, res) => {
-  try {
-    const allUsers = pool.query("select * from users");
-    res.json((await allUsers).rows);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
-// Get a userid
-app.get("/users/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const getUserid = await pool.query(
-      `select * from users
-        where first_name = $1 and last_name = $2`,
-      [id.split(" ")[0], id.split(" ")[1]]
-    );
-    res.json(getUserid.rows[0]);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
 // ====LOOK AT THIS SOME MORE
+//Get all hosts
+app.get("/eventhosts", async (req, res) => {
+  try {
+    const getHosts = await pool.query(`select 
+    (u.first_name || ' ' || u.Last_Name) as Host,
+    eh.userid
+    from users u inner join event_hosts eh on eh.userid = u.userid
+    order by u.first_name;`);
+    res.json(getHosts.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+// get all admins
+app.get("/eventadmins", async (req, res) => {
+  try {
+    const getHosts = await pool.query(`select 
+    (u.first_name || ' ' || u.Last_Name) as Host,
+    a.userid
+    from users u inner join admins a on a.userid = u.userid
+    order by u.first_name;`);
+    res.json(getHosts.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
 
 // Insert a host
 app.post("/hosts", async (req, res) => {
@@ -352,14 +365,28 @@ app.post("/hosts", async (req, res) => {
     const { event } = req.body;
     const assignHost = await pool.query(
       `INSERT INTO Hosts Values ($1, $2) Returning *`,
-      []
+      [host, event]
     );
+    res.json(assignHost.rows);
   } catch (error) {
     console.error(error.message);
   }
 });
 
 // Insert an administrator
+app.post("/administrates", async (req, res) => {
+  try {
+    const { admin } = req.body;
+    const { event } = req.body;
+    const assignAdmin = await pool.query(
+      `INSERT INTO Administrates Values ($1, $2) Returning *`,
+      [admin, event]
+    );
+    res.json(assignAdmin.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
 
 // ====LOOK AT THIS SOME MORE======
 
@@ -446,19 +473,6 @@ app.get("/completetasks", async (req, res) => {
     res.json(allCompletetasks.rows);
   } catch (error) {
     console.error(error.message);
-  }
-});
-
-// Delete a task
-app.delete("/tasks/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleteTask = await pool.query(`Delete From tasks where taskid = $1`, [
-      id,
-    ]);
-    res.json("Task Deleted!");
-  } catch (error) {
-    console.error;
   }
 });
 
