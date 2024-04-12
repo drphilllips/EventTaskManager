@@ -149,8 +149,6 @@ app.post("/events", async (req, res) => {
       ]
     );
     res.json(newEvent.rows);
-    console.log(req.body);
-    console.log(typeof req.body);
   } catch (error) {
     console.error(error.message);
   }
