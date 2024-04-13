@@ -16,7 +16,7 @@ import {
 import Home from "./pages";
 import About from "./pages/about";
 import EventFeatureGallery from "./pages/eventfeaturegallery";
-
+import SignOut from "./pages/sign-out";
 import EventRequest from "./pages/eventrequest";
  
 function App () {
@@ -31,6 +31,10 @@ function App () {
                     element={<EventRequest />}
                 />
                 <Route path="/eventfeaturegallery" element={<EventFeatureGallery />} />
+                <Route
+                    path="/sign-out"
+                    element={<SignOut />}
+                />
             </Routes>
         </Router>
     );
@@ -49,11 +53,5 @@ function App() {
     </Fragment>
   );
 }
-
-                <Route
-                    path="/sign-out"
-                    element={<SignOut />}
-                />
-
 */
 export default App;

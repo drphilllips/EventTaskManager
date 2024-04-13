@@ -543,6 +543,21 @@ app.put("/incompletetasks/:id", async (req, res) => {
 
 // Insert into the satisfies table
 
+
+// Get all Event Features
+app.get("/features", async (req, res) => {
+  try {
+    const allFeatures = await pool.query(
+      "select * from features order by feature_name asc"
+    );
+    res.json(allFeatures.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+
+
 app.listen(8000, () => {
   console.log("server has started");
 });
