@@ -329,7 +329,23 @@ app.put("/events/:id", async (req, res) => {
   }
 });
 
-// ====LOOK AT THIS SOME MORE
+// Approve an Event
+app.put("/approve_events/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const approveEvent = await pool.query(
+      `UPDATE events
+      SET 
+      event_status = 'active' where eventid = $1`,
+      [id]
+    );
+    res.json(`Event Approved!`);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 //Get all hosts
 app.get("/eventhosts", async (req, res) => {
   try {
