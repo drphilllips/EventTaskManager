@@ -402,12 +402,8 @@ app.post("/tasks", async (req, res) => {
       VALUES ($1, $2, $3, $4, $5) returning *`,
       [
         task_name,
-        await fetch(`http://localhost:8000/users/${assigned_by}`)
-          .then((res) => res.json())
-          .then((data) => data.userid),
-        await fetch(`http://localhost:8000/users/${assigned_to}`)
-          .then((res) => res.json())
-          .then((data) => data.userid),
+        assigned_by,
+        assigned_to,
         duedate,
         description,
       ]
