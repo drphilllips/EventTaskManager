@@ -329,7 +329,23 @@ app.put("/events/:id", async (req, res) => {
   }
 });
 
-// ====LOOK AT THIS SOME MORE
+// Approve an Event
+app.put("/approve_events/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const approveEvent = await pool.query(
+      `UPDATE events
+      SET 
+      event_status = 'active' where eventid = $1`,
+      [id]
+    );
+    res.json(`Event Approved!`);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 //Get all hosts
 app.get("/eventhosts", async (req, res) => {
   try {
@@ -402,12 +418,8 @@ app.post("/tasks", async (req, res) => {
       VALUES ($1, $2, $3, $4, $5) returning *`,
       [
         task_name,
-        await fetch(`http://localhost:8000/users/${assigned_by}`)
-          .then((res) => res.json())
-          .then((data) => data.userid),
-        await fetch(`http://localhost:8000/users/${assigned_to}`)
-          .then((res) => res.json())
-          .then((data) => data.userid),
+        assigned_by,
+        assigned_to,
         duedate,
         description,
       ]

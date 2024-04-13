@@ -6,6 +6,7 @@ import PendingEvents from "./components/PendingEvents";
 import AddEvent from "./components/AddEvent";
 import AddHostandAdmin from "./components/AddHostandAdmin";
 import EventSummary from "./pages/EventsSummary";
+import CreateEventpage from "./pages/CreateEventPage";
 
 import Navbar from "./components/Navbar";
 import {
@@ -18,6 +19,7 @@ import About from "./pages/about";
 import EventFeatureGallery from "./pages/eventfeaturegallery";
 import SignOut from "./pages/sign-out";
 import EventRequest from "./pages/eventrequest";
+import SignOut from "./pages/sign-out";
  
 function App () {
     return (
@@ -30,6 +32,7 @@ function App () {
                     path="/eventrequest"
                     element={<EventRequest />}
                 />
+                <Route path="/sign-out" element={<SignOut />} />
                 <Route path="/eventfeaturegallery" element={<EventFeatureGallery />} />
                 <Route
                     path="/sign-out"
@@ -47,8 +50,6 @@ function App() {
     <Fragment>
       <div className="App">
         <EventSummary />
-        <AddEvent />
-        <AddHostandAdmin />
       </div>
     </Fragment>
   );
