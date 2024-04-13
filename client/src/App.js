@@ -19,6 +19,7 @@ import About from "./pages/about";
 import EventFeatureGallery from "./pages/eventfeaturegallery";
 
 import EventRequest from "./pages/eventrequest";
+import SignOut from "./pages/sign-out";
  
 function App () {
     return (
@@ -31,6 +32,7 @@ function App () {
                     path="/eventrequest"
                     element={<EventRequest />}
                 />
+                <Route path="/sign-out" element={<SignOut />} />
                 <Route path="/eventfeaturegallery" element={<EventFeatureGallery />} />
             </Routes>
         </Router>
