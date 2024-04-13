@@ -14,6 +14,21 @@ const ActiveEvents = () => {
     getActiveEvents();
   }, []);
 
+  // Delete Event function
+  async function DeleteEvent(id) {
+    try {
+      const res = await fetch(`http://localhost:8000/events/${id}`, {
+        method: "DELETE",
+      });
+      console.log(res);
+      setActive_events(
+        active_events.filter((active_event) => active_event.eventid !== id)
+      );
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
   console.log(active_events);
   return (
     <Fragment>
@@ -21,6 +36,8 @@ const ActiveEvents = () => {
       <table className="table">
         <thead>
           <tr>
+            <th></th>
+            <th></th>
             <th>Event name</th>
             <th>Attendee Count</th>
             <th>Date</th>
@@ -33,6 +50,17 @@ const ActiveEvents = () => {
         <tbody>
           {active_events.map((active_event) => (
             <tr key={active_event.eventid}>
+              <td>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => DeleteEvent(active_event.eventid)}
+                >
+                  Delete
+                </button>
+              </td>
+              <td>
+                <button className="btn btn-warning">Edit</button>
+              </td>
               <td>{active_event.event_name}</td>
               <td>{active_event.attendees_count}</td>
               <td>{active_event.start_date}</td>
