@@ -416,13 +416,7 @@ app.post("/tasks", async (req, res) => {
       `INSERT INTO Tasks 
       (task_name, assigned_by_userid, assigned_to_userid, duedate, description)
       VALUES ($1, $2, $3, $4, $5) returning *`,
-      [
-        task_name,
-        assigned_by,
-        assigned_to,
-        duedate,
-        description,
-      ]
+      [task_name, assigned_by, assigned_to, duedate, description]
     );
     res.json(addTask.rows);
   } catch (error) {
@@ -552,8 +546,36 @@ app.put("/incompletetasks/:id", async (req, res) => {
   }
 });
 // Insert into the associated with table
+app.post("/associated_with", async (req, res) => {
+  try {
+    const { eventid } = req.body;
+
+    const addFeatureTaskSatisfaction = await pool.query(
+      `Insert Into associated_with
+    Values ($1, (select max(taskid) from tasks))`,
+      [eventid]
+    );
+    res.json(addFeatureTaskSatisfaction.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
 
 // Insert into the satisfies table
+app.post("/satisfies", async (req, res) => {
+  try {
+    const { featureid, quantity } = req.body;
+
+    const addFeatureTaskSatisfaction = await pool.query(
+      `Insert Into satisfies
+    Values ((select max(taskid) from tasks), $1, $2)`,
+      [featureid, quantity]
+    );
+    res.json(addFeatureTaskSatisfaction.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
 
 app.listen(8000, () => {
   console.log("server has started");
