@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const ActiveEvents = () => {
   const [active_events, setActive_events] = useState([]);
@@ -61,7 +62,11 @@ const ActiveEvents = () => {
               <td>
                 <button className="btn btn-warning">Edit</button>
               </td>
-              <td>{active_event.event_name}</td>
+              <td>
+                <Link to={`/events/${active_event.eventid}`}>
+                  {active_event.event_name}
+                </Link>
+              </td>
               <td>{active_event.attendees_count}</td>
               <td>{active_event.start_date}</td>
               <td>{active_event.start_time}</td>

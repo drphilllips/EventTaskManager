@@ -103,12 +103,12 @@ app.get("/locations", async (req, res) => {
   }
 });
 
-// Get a location id
+// Get a location
 app.get("/locations/:loc", async (req, res) => {
   try {
     const { loc } = req.params;
     const location = await pool.query(
-      "select * from locations where location_name = $1",
+      "select * from locations where locid = $1",
       [loc]
     );
     res.json(location.rows[0]);
@@ -253,9 +253,20 @@ app.get("/pending_events", async (req, res) => {
 app.get("/events/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const event = await pool.query(`Select * from events where eventid = $1`, [
-      id,
-    ]);
+    const event = await pool.query(
+      `select e.eventid, e.event_name, 
+      e.attendees_count, e.event_status,
+      to_char(e.start_time_date, 'mm-dd-yyyy') as start_Date,
+      to_char(e.start_time_date, 'HH24:mi AM') as start_time,
+      to_char(e.end_time_date, 'mm-dd-yyyy') as end_Date,
+      to_char(e.end_time_date, 'HH24:mi AM') as end_time,
+      l.location_name as location,
+      e.description
+          from events e inner join locations l on l.locid = e.locid
+          where e.eventid = $1
+          Order by start_Date, start_time`,
+      [id]
+    );
     res.json(event.rows);
   } catch (error) {
     console.error(error.message);
@@ -360,6 +371,26 @@ app.get("/eventhosts", async (req, res) => {
   }
 });
 
+// get a host for an event
+app.get("/event_hosting/:eventid", async (req, res) => {
+  try {
+    const { eventid } = req.params;
+    const getHosts = await pool.query(
+      `select
+    (u.first_name || ' ' || u.Last_Name) as Host,
+    eh.userid, h.eventid
+    from users u inner join event_hosts eh on eh.userid = u.userid
+    inner join hosts h on h.userid = u.userid
+    where h.eventid = $1
+    order by u.first_name;`,
+      [eventid]
+    );
+    res.json(getHosts.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 // get all admins
 app.get("/eventadmins", async (req, res) => {
   try {
@@ -368,6 +399,26 @@ app.get("/eventadmins", async (req, res) => {
     a.userid
     from users u inner join admins a on a.userid = u.userid
     order by u.first_name;`);
+    res.json(getHosts.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+// get an admin for an event
+app.get("/event_admins/:eventid", async (req, res) => {
+  try {
+    const { eventid } = req.params;
+    const getHosts = await pool.query(
+      `select 
+    (u.first_name || ' ' || u.Last_Name) as Host,
+    a.userid, ad.eventid
+    from users u inner join admins a on a.userid = u.userid
+    inner join administrates ad on ad.userid = u.userid
+    where ad.eventid = $1
+    order by u.first_name;`,
+      [eventid]
+    );
     res.json(getHosts.rows);
   } catch (error) {
     console.error(error.message);
@@ -458,11 +509,38 @@ app.get("/incompletetasks", async (req, res) => {
         to_char(t.duedate, 'dd-MON-yyyy') as due_date
         FROM tasks t INNER JOIN users u on u.userid = t.assigned_by_userid  
         Inner JOIN users u2 on u2.userID = t.assigned_to_userid
-        where t.task_name IS NOT NULL and t.completed_date_time is NULL`);
+        where t.task_name IS NOT NULL and t.completed_date_time is NULL
+        order by duedate`);
 
     res.json(allIncompletetasks.rows);
   } catch (error) {
     comsole.error(error.message);
+  }
+});
+
+// Get all incomplete tasks for an event
+app.get("/incompletetasks/:eventid", async (req, res) => {
+  try {
+    const { eventid } = req.params;
+    const allIncompletetasks = await pool.query(
+      `
+        SELECT (u.first_name || ' ' || u.Last_Name) as Assigned_By, t.taskid,
+        t.task_name,
+        (u2.first_name || ' ' || u2.Last_Name) as Assigned_To,
+        to_char(t.assigned_date_time, 'dd-MON-yyyy') as assigned_on,
+        to_char(t.duedate, 'dd-MON-yyyy') as due_date
+        FROM tasks t INNER JOIN users u on u.userid = t.assigned_by_userid  
+        Inner JOIN users u2 on u2.userID = t.assigned_to_userid
+        inner join associated_with aw on aw.taskid = t.taskid
+        where t.task_name IS NOT NULL and t.completed_date_time is NULL
+        and aw.eventid = $1
+        order by duedate`,
+      [eventid]
+    );
+
+    res.json(allIncompletetasks.rows);
+  } catch (error) {
+    console.error(error.message);
   }
 });
 
@@ -475,6 +553,28 @@ app.get("/completetasks", async (req, res) => {
       to_char(t.completed_date_time, 'dd-MON-yyyy') as completed_on
       FROM tasks t Inner JOIN users u on u.userID = t.assigned_to_userid    
       where t.task_name IS NOT NULL and t.completed_date_time is NOT NULL;`);
+
+    res.json(allCompletetasks.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+// Get all complete tasks for an event
+app.get("/completetasks/:eventid", async (req, res) => {
+  try {
+    const { eventid } = req.params;
+    const allCompletetasks = await pool.query(
+      `
+      SELECT (u.first_name || ' ' || u.Last_Name) as Completed_by, t.taskid,
+      t.task_name,    
+      to_char(t.completed_date_time, 'dd-MON-yyyy') as completed_on
+      FROM tasks t Inner JOIN users u on u.userID = t.assigned_to_userid 
+      inner join associated_with aw on aw.taskid = t.taskid   
+      where t.task_name IS NOT NULL and t.completed_date_time is NOT NULL and
+      aw.eventid = $1;`,
+      [eventid]
+    );
 
     res.json(allCompletetasks.rows);
   } catch (error) {
@@ -546,8 +646,36 @@ app.put("/incompletetasks/:id", async (req, res) => {
   }
 });
 // Insert into the associated with table
+app.post("/associated_with", async (req, res) => {
+  try {
+    const { eventid } = req.body;
+
+    const addFeatureTaskSatisfaction = await pool.query(
+      `Insert Into associated_with
+    Values ($1, (select max(taskid) from tasks))`,
+      [eventid]
+    );
+    res.json(addFeatureTaskSatisfaction.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
 
 // Insert into the satisfies table
+app.post("/satisfies", async (req, res) => {
+  try {
+    const { featureid, quantity } = req.body;
+
+    const addFeatureTaskSatisfaction = await pool.query(
+      `Insert Into satisfies
+    Values ((select max(taskid) from tasks), $1, $2)`,
+      [featureid, quantity]
+    );
+    res.json(addFeatureTaskSatisfaction.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
 
 app.listen(8000, () => {
   console.log("server has started");

@@ -1,9 +1,10 @@
 import React, { Fragment, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AddEvent = () => {
   const [locations, setLocations] = useState([]);
   const [formValues, setFormValues] = useState({});
-
+  const navigate = useNavigate();
   //   event_name: "",
   //   attendees_count: 0,
   //   start_date: "",
@@ -29,7 +30,7 @@ const AddEvent = () => {
     getLocations();
   }, []);
 
-  const onSubmitForm = async (e) => {
+  async function onSubmitForm(e) {
     e.preventDefault();
     try {
       const body = formValues;
@@ -41,10 +42,11 @@ const AddEvent = () => {
       });
       console.log(res);
       console.log(formValues);
+      navigate("/eventrequest/assignHostandAdmin");
     } catch (error) {
       console.error(error.message);
     }
-  };
+  }
 
   return (
     <Fragment>
@@ -128,7 +130,13 @@ const AddEvent = () => {
             />
           </div>
           <div className="mt-3">
-            <button className="btn btn-success">Submit</button>
+            <button
+              onClick={(e) => {
+                onSubmitForm(e);
+              }}
+            >
+              Next -{">"}
+            </button>
           </div>
         </form>
       </div>

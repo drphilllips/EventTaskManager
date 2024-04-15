@@ -9,36 +9,34 @@ import EventSummary from "./pages/EventsSummary";
 import CreateEventpage from "./pages/CreateEventPage";
 
 import Navbar from "./components/Navbar";
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages";
 import About from "./pages/about";
 import EventFeatureGallery from "./pages/eventfeaturegallery";
-
+import AssignHostandAdmin from "./pages/AssignHostandAdminPage";
 import EventRequest from "./pages/eventrequest";
 import SignOut from "./pages/sign-out";
- 
-function App () {
-    return (
-        <Router>
-            <Navbar />
-            <Routes>
-                <Route exact path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route
-                    path="/eventrequest"
-                    element={<EventRequest />}
-                />
-                <Route path="/sign-out" element={<SignOut />} />
-                <Route path="/eventfeaturegallery" element={<EventFeatureGallery />} />
-            </Routes>
-        </Router>
-    );
+import EventDetails from "./pages/EventDetails";
+
+function App() {
+  return (
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/eventrequest" element={<EventRequest />} />
+        <Route
+          path="/eventrequest/assignHostandAdmin"
+          element={<AssignHostandAdmin />}
+        />
+        <Route path="/events/:id" element={<EventDetails />} />
+        <Route path="/sign-out" element={<SignOut />} />
+        <Route path="/eventfeaturegallery" element={<EventFeatureGallery />} />
+      </Routes>
+    </Router>
+  );
 }
- 
 
 /*
 function App() {
