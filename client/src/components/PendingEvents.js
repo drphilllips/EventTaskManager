@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useReducer } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const PendingEvents = () => {
   const [active_events, setActive_events] = useState([]);
