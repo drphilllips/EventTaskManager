@@ -48,5 +48,4 @@ Create VIEW Hosts_sign_in AS
 
 select * from All_assigned_tasks;
 select * from All_completed_tasks;
-select * from All_Event_Features;
 select * from Hosts_sign_in;
