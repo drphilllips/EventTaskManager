@@ -16,6 +16,7 @@ import EventFeatureGallery from "./pages/eventfeaturegallery";
 import AssignHostandAdmin from "./pages/AssignHostandAdminPage";
 import EventRequest from "./pages/eventrequest";
 import SignOut from "./pages/sign-out";
+import EventDetails from "./pages/EventDetails";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           path="/eventrequest/assignHostandAdmin"
           element={<AssignHostandAdmin />}
         />
+        <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/sign-out" element={<SignOut />} />
         <Route path="/eventfeaturegallery" element={<EventFeatureGallery />} />
       </Routes>

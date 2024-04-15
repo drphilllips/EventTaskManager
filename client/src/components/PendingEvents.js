@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState, useReducer } from "react";
-
+import { Link } from "react-router-dom";
 const PendingEvents = () => {
   const [active_events, setActive_events] = useState([]);
 
@@ -82,7 +82,11 @@ const PendingEvents = () => {
                   Approve
                 </button>
               </td>
-              <td>{active_event.event_name}</td>
+              <td>
+                <Link to={`/events/${active_event.eventid}`}>
+                  {active_event.event_name}
+                </Link>
+              </td>
               <td>{active_event.attendees_count}</td>
               <td>{active_event.start_date}</td>
               <td>{active_event.start_time}</td>
