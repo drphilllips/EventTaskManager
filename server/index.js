@@ -416,13 +416,7 @@ app.post("/tasks", async (req, res) => {
       `INSERT INTO Tasks 
       (task_name, assigned_by_userid, assigned_to_userid, duedate, description)
       VALUES ($1, $2, $3, $4, $5) returning *`,
-      [
-        task_name,
-        assigned_by,
-        assigned_to,
-        duedate,
-        description,
-      ]
+      [task_name, assigned_by, assigned_to, duedate, description]
     );
     res.json(addTask.rows);
   } catch (error) {
