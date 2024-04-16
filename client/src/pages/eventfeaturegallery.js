@@ -7,7 +7,7 @@ const EventFeatureGallery = () => {
             <h1>
              <EventFeatures/> 
             </h1>
-            <button>Add Event Feature (this doesn't do anything yet)</button>
+            <button>Add Event Feature</button>
         </div>
     );
 };
