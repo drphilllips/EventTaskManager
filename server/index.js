@@ -569,6 +569,69 @@ app.get("/features", async (req, res) => {
 });
 
 
+app.get("/tasktype", async (req, res) => {
+  try {
+    const allTaskType = await pool.query(
+      "select * from Task_Type"
+    );
+    res.json(allTaskType.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+
+app.get("/company", async (req, res) => {
+  try {
+    const allVendors = await pool.query(
+      "select * from Business_Contacts bc, Company c WHERE bc.companyID = c.companyID"
+    );
+    res.json(allVendors.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+app.get("/mostrecenttask", async (req, res) => {
+  try {
+    const task = await pool.query(`select * from Tasks where taskID = (select max(taskID) from Tasks)`);
+    res.json(task.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+
+//______________________________________________________________________________________________________________________
+
+//This is where things start going badly
+//Working calls are above the line, these are bad
+
+
+
+
+app.post("/assignFeatureToEvent", async (req, res) => {
+  // await
+  try {
+    const {eventID } = req.body;
+    const {taskID } = req.body;
+    const assignFeatureToEvent = await pool.query(
+      
+      "INSERT INTO Associated_with (eventID, taskID)\
+            VALUES($1, $2)\
+            RETURNING *",
+      [eventID, taskID]
+    );
+    res.json(assignFeatureToEvent.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+
+
+
 
 app.listen(8000, () => {
   console.log("server has started");
