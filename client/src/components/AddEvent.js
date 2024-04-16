@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "./Navbar/NavbarElements";
 
-
 const AddEvent = () => {
   const [locations, setLocations] = useState([]);
   const [formValues, setFormValues] = useState({});
@@ -21,12 +20,10 @@ const AddEvent = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  
-  function refreshPage () {
-    window.location.reload(false)
+  function refreshPage() {
+    window.location.reload(false);
   }
   //https://stackoverflow.com/questions/38256256/reactjs-page-refreshing-upon-onclick-handle-of-button
-
 
   async function getLocations() {
     const res = await fetch("http://localhost:8000/locations");
@@ -44,7 +41,7 @@ const AddEvent = () => {
     try {
       const body = formValues;
 
-      const res = await fetch("http://localhost:8000/events", {
+      const res = await fetch("http://localhost:8000/host_events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -148,9 +145,9 @@ const AddEvent = () => {
             </button>
           </div>
         </form>
-        <button><NavLink to="/addAdminPage">
-                        Next
-                    </NavLink></button>
+        <button>
+          <NavLink to="/addAdminPage">Next</NavLink>
+        </button>
       </div>
     </Fragment>
   );
