@@ -1,5 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { NavLink } from "./Navbar/NavbarElements";
+
 
 const AddEvent = () => {
   const [locations, setLocations] = useState([]);
@@ -18,6 +20,13 @@ const AddEvent = () => {
 
     setFormValues({ ...formValues, [name]: value });
   };
+
+  
+  function refreshPage () {
+    window.location.reload(false)
+  }
+  //https://stackoverflow.com/questions/38256256/reactjs-page-refreshing-upon-onclick-handle-of-button
+
 
   async function getLocations() {
     const res = await fetch("http://localhost:8000/locations");
@@ -64,7 +73,7 @@ const AddEvent = () => {
             />
           </div>
           <div className="mt-3">
-            <label>Number of Expected Attendees::</label>
+            <label>Number of Expected Attendees:</label>
             <br />
             <input
               type="number"
@@ -74,7 +83,7 @@ const AddEvent = () => {
             />
           </div>
           <div className="mt-3">
-            <label>Start Date:</label>
+            <label>Date:</label>
             <br />
             <input
               type="date"
@@ -104,7 +113,7 @@ const AddEvent = () => {
             />
           </div>
           <div className="mt-3">
-            <label>Location</label>
+            <label>Location:</label>
             <br />
             <select
               name="location"
@@ -120,7 +129,7 @@ const AddEvent = () => {
             </select>
           </div>
           <div className="mt-3">
-            <label>description:</label>
+            <label>Description:</label>
             <br />
             <textarea
               type="time"
@@ -139,6 +148,9 @@ const AddEvent = () => {
             </button>
           </div>
         </form>
+        <button><NavLink to="/addAdminPage">
+                        Next
+                    </NavLink></button>
       </div>
     </Fragment>
   );

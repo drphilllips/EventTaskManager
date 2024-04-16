@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { NavLink } from "./Navbar/NavbarElements";
 
 const AddHostandAdmin = () => {
   const [hostcount, sethostcount] = useState(1);
@@ -135,7 +136,9 @@ const AddHostandAdmin = () => {
           assignAdmin(e);
         }}
       >
-        Next -{">"}
+       <NavLink to="/feature_launchpad_page ">
+                        Next
+                    </NavLink>
       </button>
     </Fragment>
   );
