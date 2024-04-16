@@ -1,7 +1,15 @@
 import React from "react";
+import EventFeatures from "../components/EventFeatures";
  
 const EventFeatureGallery = () => {
-    return <h1>Event Features! Find a way to hide this from non-admins later</h1>;
+    return (
+        <div>
+            <h1>
+             <EventFeatures/> 
+            </h1>
+            <button>Add Event Feature (this doesn't do anything yet)</button>
+        </div>
+    );
 };
  
 export default EventFeatureGallery;
