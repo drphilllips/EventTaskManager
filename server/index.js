@@ -167,18 +167,19 @@ app.post("/host_events", async (req, res) => {
       description,
     } = req.body;
 
+    const start_time_date = new Date(start_date + " " + start_time + ":00");
+    const end_time_date = new Date(start_date + " " + end_time + ":00");
+
     const newEvent = await pool.query(
       `INSERT INTO events 
               (event_name, attendees_count, start_time_date, end_time_date, event_status, locid, description)
-             VALUES ($1, $2, $3, $4, 'Pending', $5, $6) Returning *`,
+             VALUES ($1, $2, $3, $4, 'pending', $5, $6) Returning *`,
       [
         event_name,
         attendees_count,
-        start_date.concat(" ", start_time),
-        end_date.concat(" ", end_time),
-        await fetch(`http://localhost:8000/locations/${location}`)
-          .then((res) => res.json())
-          .then((data) => data.locid),
+        start_time_date,
+        end_time_date,
+        location,
         description,
       ]
     );
@@ -677,7 +678,6 @@ app.post("/satisfies", async (req, res) => {
   }
 });
 
-
 // Get all Event Features
 app.get("/features", async (req, res) => {
   try {
@@ -690,18 +690,14 @@ app.get("/features", async (req, res) => {
   }
 });
 
-
 app.get("/tasktype", async (req, res) => {
   try {
-    const allTaskType = await pool.query(
-      "select * from Task_Type"
-    );
+    const allTaskType = await pool.query("select * from Task_Type");
     res.json(allTaskType.rows);
   } catch (error) {
     console.error(error.message);
   }
 });
-
 
 app.get("/company", async (req, res) => {
   try {
@@ -716,29 +712,26 @@ app.get("/company", async (req, res) => {
 
 app.get("/mostrecenttask", async (req, res) => {
   try {
-    const task = await pool.query(`select * from Tasks where taskID = (select max(taskID) from Tasks)`);
+    const task = await pool.query(
+      `select * from Tasks where taskID = (select max(taskID) from Tasks)`
+    );
     res.json(task.rows);
   } catch (error) {
     console.error(error.message);
   }
 });
 
-
 //______________________________________________________________________________________________________________________
 
 //This is where things start going badly
 //Working calls are above the line, these are bad
 
-
-
-
 app.post("/assignFeatureToEvent", async (req, res) => {
   // await
   try {
-    const {eventID } = req.body;
-    const {taskID } = req.body;
+    const { eventID } = req.body;
+    const { taskID } = req.body;
     const assignFeatureToEvent = await pool.query(
-      
       "INSERT INTO Associated_with (eventID, taskID)\
             VALUES($1, $2)\
             RETURNING *",
@@ -749,11 +742,6 @@ app.post("/assignFeatureToEvent", async (req, res) => {
     console.error(err.message);
   }
 });
-
-
-
-
-
 
 app.listen(8000, () => {
   console.log("server has started");
