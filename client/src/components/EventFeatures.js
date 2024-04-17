@@ -18,7 +18,7 @@ async function getFeatures() {
 
   return (
     <Fragment>
-      <h1>Event Feature Gallery (Hide from Non Admins?)</h1>
+      <h1>Event Feature Gallery</h1>
       <table className="table">
         <thead>
           <tr>

@@ -15,9 +15,6 @@ const Navbar = () => {
                     <NavLink to="/eventfeaturegallery" activeStyle>
                         Event Feature Gallery
                     </NavLink>
-                    <NavLink to="/about" activeStyle>
-                        About
-                    </NavLink>
                     <NavLink to="/sign-out" activeStyle>
                         Profile
                     </NavLink>

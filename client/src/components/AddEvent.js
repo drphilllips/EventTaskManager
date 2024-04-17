@@ -145,9 +145,8 @@ const AddEvent = () => {
             </button>
           </div>
         </form>
-        {/* <button>
-          <NavLink to="/addAdminPage">Next</NavLink>
-        </button> */}
+
+
       </div>
     </Fragment>
   );
