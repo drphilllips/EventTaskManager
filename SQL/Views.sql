@@ -1,10 +1,7 @@
---Create different views for the web app
-
 Drop VIEW if exists All_assigned_tasks;
 Drop VIEW if exists All_completed_tasks;
-Drop VIEW if exists All_Event_Features;
-Drop VIEW if exists Hosts_sign_in;
-
+Drop View IF EXISTS All_Active_Events;
+Drop View IF EXISTS All_Pending_Events;
 
 --View all assigned tasks
 Create VIEW All_assigned_tasks AS
@@ -33,13 +30,31 @@ Create VIEW All_completed_Tasks AS
         Inner Join associated_with aw on aw.taskid = t.taskid
 		inner join events e on e.eventid = aw.eventid
         where t.task_name IS NOT NULL and t.completed_date_time is NOT NULL;
-       
-             
-     
-Create VIEW Hosts_sign_in AS
-    select (u.first_name || ' ' || u.Last_Name) as Host_Name,
-            e.event_name,
-            to_char(ipa.sign_in, 'dd-MON-yyyy hh:mm AM') as sign_in,
-            to_char(ipa.sign_out, 'dd-MON-yyyy hh:mm AM') as sign_out
-    from users u natural join is_present_at ipa
-    natural join events e ;
+                    
+
+Create View All_Active_Events AS
+	select e.eventid, e.event_name, 
+			e.attendees_count, e.event_status,
+			to_char(e.start_time_date, 'mm-dd-yyyy') as start_Date,
+			to_char(e.start_time_date, 'HH24:mi AM') as start_time,
+			to_char(e.end_time_date, 'mm-dd-yyyy') as end_Date,
+			to_char(e.end_time_date, 'HH24:mi AM') as end_time,
+			l.location_name as location,
+			e.description
+			from events e inner join locations l on l.locid = e.locid
+			where e.event_status = 'active'
+			Order by start_Date, start_time;
+			
+Create View All_Pending_Events AS
+	select e.eventid, e.event_name, 
+			e.attendees_count, e.event_status,
+			to_char(e.start_time_date, 'mm-dd-yyyy') as start_Date,
+			to_char(e.start_time_date, 'HH24:mi AM') as start_time,
+			to_char(e.end_time_date, 'mm-dd-yyyy') as end_Date,
+			to_char(e.end_time_date, 'HH24:mi AM') as end_time,
+			l.location_name as location,
+			e.description
+			from events e inner join locations l on l.locid = e.locid
+			where e.event_status = 'pending'
+			Order by start_Date, start_time;
+			
