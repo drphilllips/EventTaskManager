@@ -145,8 +145,6 @@ const AddEvent = () => {
             </button>
           </div>
         </form>
-
-
       </div>
     </Fragment>
   );

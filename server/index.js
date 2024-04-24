@@ -217,7 +217,9 @@ app.get("/active_events", async (req, res) => {
 		to_char(e.start_time_date, 'HH24:mi AM') as start_time,
 		to_char(e.end_time_date, 'mm-dd-yyyy') as end_Date,
 		to_char(e.end_time_date, 'HH24:mi AM') as end_time,
+    e.start_time_date,e.end_time_date,
 		l.location_name as location,
+    l.locid,
 		e.description
         from events e inner join locations l on l.locid = e.locid
         where e.event_status = 'active'
@@ -238,7 +240,10 @@ app.get("/pending_events", async (req, res) => {
 		to_char(e.start_time_date, 'HH24:mi AM') as start_time,
 		to_char(e.end_time_date, 'mm-dd-yyyy') as end_Date,
 		to_char(e.end_time_date, 'HH24:mi AM') as end_time,
+    e.start_time_date,e.end_time_date,
+
 		l.location_name as location,
+    l.locid,
 		e.description
         from events e inner join locations l on l.locid = e.locid
         where e.event_status = 'pending'
@@ -308,11 +313,13 @@ app.put("/events/:id", async (req, res) => {
       attendees_count,
       start_date,
       start_time,
-      end_date,
       end_time,
       location,
       description,
     } = req.body;
+
+    const start_time_date = new Date(start_date + " " + start_time + ":00");
+    const end_time_date = new Date(start_date + " " + end_time + ":00");
 
     const editEvent = await pool.query(
       `UPDATE events
@@ -323,14 +330,13 @@ app.put("/events/:id", async (req, res) => {
       end_time_date = $4,
       locid = $5,
       description = $6 where eventid = $7`,
+
       [
         event_name,
         attendees_count,
-        start_date.concat(" ", start_time),
-        end_date.concat(" ", end_time),
-        await fetch(`http://localhost:8000/locations/${location}`)
-          .then((res) => res.json())
-          .then((data) => data.locid),
+        start_time_date,
+        end_time_date,
+        location,
         description,
         id,
       ]

@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import EditEvents from "./EditEvents";
 
 const ActiveEvents = () => {
   const [active_events, setActive_events] = useState([]);
@@ -30,7 +31,7 @@ const ActiveEvents = () => {
     }
   }
 
-  console.log(active_events);
+  // console.log(active_events);
   return (
     <Fragment>
       <h1>Active Events</h1>
@@ -60,7 +61,7 @@ const ActiveEvents = () => {
                 </button>
               </td>
               <td>
-                <button className="btn btn-warning">Edit</button>
+                <EditEvents event={active_event} />
               </td>
               <td>
                 <Link to={`/events/${active_event.eventid}`}>

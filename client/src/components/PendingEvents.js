@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
+import EditEvents from "./EditEvents";
 
 import { Link } from "react-router-dom";
-
 
 const PendingEvents = () => {
   const [active_events, setActive_events] = useState([]);
@@ -73,7 +73,7 @@ const PendingEvents = () => {
                 </button>
               </td>
               <td>
-                <button className="btn btn-warning">Edit</button>
+                <EditEvents event={active_event} />
               </td>
               <td>
                 <button
