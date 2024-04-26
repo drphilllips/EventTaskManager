@@ -1,10 +1,10 @@
 import React, { Fragment, useState, useEffect } from "react";
+import EditEventFeatures from "./EditEventFeatures";
 
 const EventFeatures = () => {
-    const [features, setFeatures] = useState([]);
+  const [features, setFeatures] = useState([]);
 
-
-async function getFeatures() {
+  async function getFeatures() {
     const res = await fetch("http://localhost:8000/features");
     const featuresArray = await res.json();
     setFeatures(featuresArray);
@@ -13,8 +13,7 @@ async function getFeatures() {
 
   useEffect(() => {
     getFeatures();
-  }, []);
-
+  }, );
 
   return (
     <Fragment>
@@ -28,18 +27,19 @@ async function getFeatures() {
           </tr>
         </thead>
         <tbody>
-          {features.map((features) => (
-            <tr key={features.featureid}>
-              <td>{features.feature_name}</td>
-              <td>{features.description}</td>
-              <td><button>Edit</button></td>
+          {features.map((feature) => (
+            <tr key={feature.featureid}>
+              <td>{feature.feature_name}</td>
+              <td>{feature.description}</td>
+              <td>
+                <EditEventFeatures feature={feature} />
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </Fragment>
   );
-
 };
 
 export default EventFeatures;
