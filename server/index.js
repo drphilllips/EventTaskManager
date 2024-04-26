@@ -727,6 +727,48 @@ app.get("/mostrecenttask", async (req, res) => {
   }
 });
 
+// Create an Event Feature
+app.post("/features", async (req, res) => {
+  try {
+    const {
+      feature_name,
+      description,
+    } = req.body;
+
+    const newEventFeature = await pool.query(
+      `INSERT INTO features 
+            (feature_name, description)
+           VALUES ($1, $2) Returning *`,
+      [
+        feature_name,
+        description,
+      ]
+    );
+    res.json(newEventFeature.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+// Update an event feature
+app.put("/features/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { feature_name, description } = req.body;
+
+    const editEventFeature = await pool.query(
+      `UPDATE features
+      SET 
+      feature_name = $1,
+      description = $2 where featureid = $3`,
+      [feature_name, description, id]
+    );
+    res.json(`Event Feature Updated!`);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 //______________________________________________________________________________________________________________________
 
 //This is where things start going badly
