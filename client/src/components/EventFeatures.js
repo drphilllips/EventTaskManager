@@ -8,12 +8,24 @@ const EventFeatures = () => {
     const res = await fetch("http://localhost:8000/features");
     const featuresArray = await res.json();
     setFeatures(featuresArray);
-    console.log(features);
+  }
+
+  // Delete Event Feature function
+  async function DeleteEventFeature(id) {
+    try {
+      const res = await fetch(`http://localhost:8000/features/${id}`, {
+        method: "DELETE",
+      });
+      console.log(res);
+      setFeatures(features.filter((feature) => feature.featureid !== id));
+    } catch (error) {
+      console.error(error.message);
+    }
   }
 
   useEffect(() => {
     getFeatures();
-  }, );
+  });
 
   return (
     <Fragment>
@@ -21,19 +33,28 @@ const EventFeatures = () => {
       <table className="table">
         <thead>
           <tr>
+            <th></th>
+            <th></th>
             <th>Event Feature Name</th>
             <th>Event Feature Description</th>
-            <th>Edit</th>
           </tr>
         </thead>
         <tbody>
           {features.map((feature) => (
             <tr key={feature.featureid}>
-              <td>{feature.feature_name}</td>
-              <td>{feature.description}</td>
+              <td>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => DeleteEventFeature(feature.featureid)}
+                >
+                  Delete
+                </button>
+              </td>
               <td>
                 <EditEventFeatures feature={feature} />
               </td>
+              <td>{feature.feature_name}</td>
+              <td>{feature.description}</td>
             </tr>
           ))}
         </tbody>

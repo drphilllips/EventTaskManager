@@ -730,19 +730,13 @@ app.get("/mostrecenttask", async (req, res) => {
 // Create an Event Feature
 app.post("/features", async (req, res) => {
   try {
-    const {
-      feature_name,
-      description,
-    } = req.body;
+    const { feature_name, description } = req.body;
 
     const newEventFeature = await pool.query(
       `INSERT INTO features 
             (feature_name, description)
            VALUES ($1, $2) Returning *`,
-      [
-        feature_name,
-        description,
-      ]
+      [feature_name, description]
     );
     res.json(newEventFeature.rows);
   } catch (error) {
@@ -764,6 +758,20 @@ app.put("/features/:id", async (req, res) => {
       [feature_name, description, id]
     );
     res.json(`Event Feature Updated!`);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+// Delete an event feature
+app.delete("/features/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deteleEvent = await pool.query(
+      "Delete FROM features where featureid = $1",
+      [id]
+    );
+    res.json(`Event Feature Deleted!`);
   } catch (error) {
     console.error(error.message);
   }
