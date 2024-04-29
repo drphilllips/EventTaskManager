@@ -6,17 +6,17 @@ DROP TABLE if exists Uses ;
 DROP TABLE if exists Administrates ;
 DROP TABLE if exists Hosts ;
 DROP TABLE if exists Event_Hosts ;
-DROP TABLE if exists Admins ;
+DROP TABLE if exists Admins cascade;
 DROP TABLE if exists Satisfies ;
 --DROP TABLE Subtask_of;
 DROP TABLE if exists Is_Contacted ;
 --DROP TABLE Assigned_Tasks;
 --DROP TABLE Completed_Tasks;
 DROP TABLE if exists Business_Contacts;
-DROP TABLE if exists Associated_With ;
+DROP TABLE if exists Associated_With Cascade;
 DROP TABLE if exists Tasks ;
 DROP TABLE if exists Features ;
-DROP TABLE if exists EVENTS ;
+DROP TABLE if exists EVENTS cascade;
 DROP TABLE if exists Locations ;
 DROP TABLE if exists Vendor ;
 DROP TABLE if exists Caterer ;
@@ -64,6 +64,7 @@ CREATE TABLE USERS (
 -- Primary Key: UserID
 -- Candidate Key: Student_ID_integer
 -- Foriegn Key: UserID"
+
 CREATE TABLE Event_Hosts (
     UserID VARCHAR(20) PRIMARY KEY,
     Student_ID_integer CHAR(9) UNIQUE,
@@ -74,6 +75,7 @@ CREATE TABLE Event_Hosts (
 -- Primary Key: UserID
 -- No Candidate Key
 -- Foriegn Key: UserID"
+
 CREATE TABLE Admins (
     UserID VARCHAR(20) PRIMARY KEY,
     Job_Title VARCHAR(30), 
@@ -123,6 +125,7 @@ CREATE TABLE Feature_Inventory (
 -- Primary Key: CompanyID
 -- No Candidate Key
 -- No Forieng Key"
+
 CREATE SEQUENCE Company_seq
     MINVALUE 1
     START WITH 1
@@ -233,11 +236,10 @@ CREATE TABLE Tasks (
     Assigned_Date_Time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Completed_Date_Time TIMESTAMP,
     ParentTaskID integer, 
-    FOREIGN KEY (Assigned_by_UserID) REFERENCES USERS (UserID),
+    FOREIGN KEY (Assigned_by_UserID) REFERENCES users (UserID),
     FOREIGN KEY (Assigned_to_UserID) REFERENCES USERS (UserID),
     FOREIGN KEY (TypeID) REFERENCES Task_Type (TypeID),
     Foreign Key (ParentTaskID) References Tasks (TaskID)
-    -- FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID)
 );
 
 -- "Is Contacted For(FeatureID: integer, ContactID: Integer)
@@ -276,7 +278,7 @@ CREATE TABLE Satisfies (
     FeatureID integer,
     Quantity integer,
     PRIMARY KEY (TaskID, FeatureID),
-    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),
+    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID) on delete cascade,
     FOREIGN KEY (FeatureID) REFERENCES Features (FeatureID)
 );
 
@@ -286,6 +288,7 @@ CREATE TABLE Satisfies (
 -- Primary Key: Event TypeID
 -- No Candidate Key
 -- No Foriegn Key"
+
 CREATE SEQUENCE Event_Type_seq
     MINVALUE 1
     START WITH 1
@@ -321,6 +324,7 @@ CREATE TABLE Location_types (
 -- Primary Key: LocID
 -- No Candidate Key
 -- Foriegn Key: Location TypeID"
+
 CREATE SEQUENCE Location_seq
     MINVALUE 1
     START WITH 1
@@ -356,7 +360,7 @@ CREATE TABLE Events (
     Start_Time_Date TIMESTAMP,
     End_Time_Date TIMESTAMP,
     Event_TypeID integer,
-    Event_Status VARCHAR(20) Default 'Active',
+    Event_Status VARCHAR(20) Default 'active',
     LocID integer,
     DESCRIPTION VARCHAR(250),
     FOREIGN KEY (Event_TypeID) REFERENCES Event_Types (Event_TypeID),
@@ -367,12 +371,13 @@ CREATE TABLE Events (
 -- Primary key: (EventID, FeatureID)
 -- No Candidate Key
 -- Foriegn Key: EventID, Feature ID"
+
 CREATE TABLE Associated_With (
-    EventID integer,
-    TaskID integer,
+    EventID integer ,
+    TaskID integer ,
     PRIMARY KEY (EventID, TaskID),
-    FOREIGN KEY (EventID) REFERENCES Events (EventID),
-    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID)
+    FOREIGN KEY (EventID) REFERENCES Events (EventID) on delete cascade,
+    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID)on delete cascade
 );
 
 
@@ -380,11 +385,12 @@ CREATE TABLE Associated_With (
 -- Primary Key: (UserID, EventID)
 -- No Candidate Key
 -- Foriegn Key: UserID, EventID"
+
 CREATE TABLE Administrates (
     UserID VARCHAR(20),
     EventId integer,
     PRIMARY Key (UserID, EventID),
-    FOREIGN KEY (EventID) REFERENCES Events (EventID),
+    FOREIGN KEY (EventID) REFERENCES Events (EventID) on delete cascade,
     FOREIGN KEY (UserID) REFERENCES Admins (UserID)
 );
 
@@ -392,11 +398,12 @@ CREATE TABLE Administrates (
 -- Primary Key: (UserID, EventID)
 -- No Candidate Key
 -- Foriegn Key: UserID, EventID"
+
 CREATE TABLE Hosts (
     UserID VARCHAR(20),
     EventId integer,
     PRIMARY Key (UserID, EventID),
-    FOREIGN KEY (EventID) REFERENCES Events (EventID),
+    FOREIGN KEY (EventID) REFERENCES Events (EventID) on delete cascade,
     FOREIGN KEY (UserID) REFERENCES Event_Hosts (UserID)
 );
 
@@ -404,17 +411,13 @@ CREATE TABLE Hosts (
 -- Primary Key: (UserID, EventID)
 -- No Candidate Key
 -- Foriegn Key: UserID, EventID"
+
 CREATE TABLE Is_Present_at (
     UserID VARCHAR(20),
     EventID integer,
     Sign_In TIMESTAMP,
     Sign_Out TIMESTAMP ,
     PRIMARY Key (UserID, EventID),
-    FOREIGN KEY (EventID) REFERENCES Events (EventID),
+    FOREIGN KEY (EventID) REFERENCES Events (EventID) on delete cascade,
     FOREIGN KEY (UserID) REFERENCES Event_Hosts (UserID)
 );
-
-
-
-
-
