@@ -37,7 +37,11 @@ app.post("/users", async (req, res) => {
 
 app.get("/users", async (req, res) => {
   try {
-    const allUsers = await pool.query("SELECT * FROM users");
+    const allUsers = await pool.query(
+      `SELECT userid,  
+       (first_name || ' ' || Last_Name) as user
+       FROM users order by first_name`
+    );
     res.json(allUsers.rows);
   } catch (err) {
     console.error(err.message);
@@ -467,14 +471,14 @@ app.post("/administrates", async (req, res) => {
 // Create a task
 app.post("/tasks", async (req, res) => {
   try {
-    const { task_name, assigned_by, assigned_to, duedate, description } =
+    const { task_name, assigned_by, assigned_to, typeid, description } =
       req.body;
 
     const addTask = await pool.query(
       `INSERT INTO Tasks 
-      (task_name, assigned_by_userid, assigned_to_userid, duedate, description)
-      VALUES ($1, $2, $3, $4, $5) returning *`,
-      [task_name, assigned_by, assigned_to, duedate, description]
+      (task_name, assigned_by_userid, assigned_to_userid, duedate, typeid, description )
+      VALUES ($1, $2, $3, (current_timestamp + '5 days'), $4, $5) returning *`,
+      [task_name, assigned_by, assigned_to, typeid, description]
     );
     res.json(addTask.rows);
   } catch (error) {
@@ -489,6 +493,16 @@ app.get("/tasks/:id", async (req, res) => {
     const getTask = await pool.query(`Select * from tasks WHERE taskid = $1`, [
       id,
     ]);
+    res.json(getTask.rows[0]);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+// get most recent task
+app.get("/mostrecenttask/:id", async (req, res) => {
+  try {
+    const getTask = await pool.query(`Select max(taskid) from tasks`, [id]);
     res.json(getTask.rows[0]);
   } catch (error) {
     console.error(error.message);
