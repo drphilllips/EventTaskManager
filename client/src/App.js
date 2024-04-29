@@ -23,57 +23,43 @@ import AddEventFeaturesNeither from "./components/AddEventFeatures_neither";
 import EventDetails from "./pages/EventDetails";
 import AssignHostandAdmin from "./pages/AssignHostandAdminPage";
 
-
-
-function App () {
-    return (
-        <Router>
-            <Navbar />
-            <Routes>
-                <Route exact path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route
-                    path="/eventrequest"
-                    element={<EventRequest />}
-                />
-                <Route path="/sign-out" element={<SignOut />} />
-                <Route path="/eventfeaturegallery" element={<EventFeatureGallery />} />
-                <Route
-                    path="/sign-out"
-                    element={<SignOut />}
-                />
-                  <Route
-                    path="/addAdminPage"
-                    element={<AddAdmin />}
-                />
-                <Route
-                    path="/feature_launchpad_page"
-                    element={<FeatureLaunchpadPage />}
-                />
-                <Route
-                    path="/AddEventFeatures_inventory"
-                    element={<AddEventFeaturesInventory />}
-                />
-                <Route
-                    path="/AddEventFeatures_external"
-                    element={<AddEventFeaturesExternal />}
-                />
-                <Route
-                    path="/AddEventFeatures_neither"
-                    element={<AddEventFeaturesNeither />}
-                />
-                        <Route path="/eventrequest" element={<EventRequest />} />
+function App() {
+  return (
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/eventrequest" element={<EventRequest />} />
+        <Route path="/sign-out" element={<SignOut />} />
+        <Route path="/eventfeaturegallery" element={<EventFeatureGallery />} />
+        <Route path="/sign-out" element={<SignOut />} />
+        <Route path="/addAdminPage" element={<AddAdmin />} />
+        <Route
+          path="/feature_launchpad_page"
+          element={<FeatureLaunchpadPage />}
+        />
+        <Route
+          path="/AddEventFeatures_inventory"
+          element={<AddEventFeaturesInventory />}
+        />
+        <Route
+          path="/AddEventFeatures_external"
+          element={<AddEventFeaturesExternal />}
+        />
+        <Route
+          path="/AddEventFeatures_neither"
+          element={<AddEventFeaturesNeither />}
+        />
+        <Route path="/eventrequest" element={<EventRequest />} />
         <Route
           path="/eventrequest/assignHostandAdmin"
           element={<AssignHostandAdmin />}
         />
         <Route path="/events/:id" element={<EventDetails />} />
-            </Routes>
-        </Router>
-    );
+      </Routes>
+    </Router>
+  );
 }
- 
+
 export default App;
-
-
-
