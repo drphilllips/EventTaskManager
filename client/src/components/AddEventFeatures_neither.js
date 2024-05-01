@@ -8,14 +8,15 @@ const AddEventFeaturesNeither = () => {
   // all task types
   const [taskTypes, setTaskTypes] = useState([]);
 
+  //most recent event
+  const [event, setEvent] = useState([]);
+  
   // all admins
   const [admins, setAdmins] = useState([]);
 
   // all users
   const [users, setUsers] = useState([]);
 
-  //most recent event
-  const [event, setEvent] = useState([]);
 
   //most recent task
   const [task, setTask] = useState([]);
@@ -24,7 +25,7 @@ const AddEventFeaturesNeither = () => {
   const [featureID, setFeatureID] = useState("");
 
   // quantity of feature
-  const [quantity, setquantity] = useState(1);
+  const [quantity, setquantity] = useState();
 
   // not sure what these are
   const [associatedWith, setAssociatedWith] = useState({});
@@ -99,13 +100,14 @@ const AddEventFeaturesNeither = () => {
   }, []);
 
   async function getAllAdmins() {
-    const res = await fetch("http://localhost:8000/eventadmins");
+    const res = await fetch(`http://localhost:8000/event_admins/${event.eventid}`);
     const res_array = await res.json();
     setAdmins(res_array);
   }
   useEffect(() => {
-    getAllAdmins();
-  }, []);
+      getAllAdmins();
+  }, [event.eventid]);
+
 
   async function getAllUsers() {
     const res = await fetch("http://localhost:8000/users");
@@ -115,6 +117,17 @@ const AddEventFeaturesNeither = () => {
   useEffect(() => {
     getAllUsers();
   }, []);
+  
+  /*
+  async function getAllUsers() {
+    const res = await fetch(`http://localhost:8000/event_hosting/${event.eventid}`);
+    const res_array = await res.json();
+    setUsers(res_array);
+  }
+  useEffect(() => {
+    getAllUsers();
+  }, [event.eventid]);
+*/
 
   async function putTask(e) {
     e.preventDefault();
@@ -194,7 +207,6 @@ const AddEventFeaturesNeither = () => {
     e.preventDefault();
     try {
       const body = taskformValues;
-
       const res = await fetch("http://localhost:8000/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -202,6 +214,7 @@ const AddEventFeaturesNeither = () => {
       });
       associateEventandTask(e);
       satisfyEventandFeature(e);
+
 
       console.log(res);
       console.log(taskformValues);
@@ -263,16 +276,6 @@ const AddEventFeaturesNeither = () => {
             name="task_name"
             value={taskformValues.task_name}
             onChange={handleChange}
-          />
-        </div>
-        <div className="mt-3">
-          <label>Quantity:</label>
-          <br />
-          <input
-            type="number"
-            name="quantity"
-            value={quantity.quanity}
-            onChange={(e) => setquantity(e.target.value)}
           />
         </div>
         <div className="mt-3">
